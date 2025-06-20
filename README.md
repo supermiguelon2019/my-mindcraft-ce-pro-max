@@ -27,7 +27,7 @@
 
 <p align="center">
   <a href="/FAQ.md">FAQ</a> |
-  <a href="https://discord.gg/mp73p35dzC">Discord Support</a> |
+  <a href="https://discord.gg/DNnBQvCtwr">Discord Support</a> |
   <a href="https://kolbynottingham.com/mindcraft/">Blog Post</a> |
   <a href="https://mindcraft-minecollab.github.io/index.html">Paper Website</a> |
   <a href="/minecollab.md">MineCollab</a>
@@ -43,7 +43,7 @@
 | **Development Status** | Inactive | **Active** |
 | **Minecraft Version** | Up to 1.21.1 | Up to **1.21.4** |
 | **Node.js Version** | v14+ | **v18+** (v22 recommended) |
-| **Default Ollama Model**| `llama3.1` | **`ollama/sweaterdog/andy-4`** (specialized model) |
+| **Default Ollama Model**| `llama3.1` (Generic) | **`Andy-4`** (Built for Minecraft) |
 | **Free API Option** | No | **Yes** (`pollinations`) |
 | **Voice Interaction** | Basic Text-to-Speech (TTS) | Advanced TTS & **Speech-to-Text (STT)** |
 | **Vision Mode** | Simple on/off toggle | **Modes**: `off`, `prompted`, `always` |
@@ -51,6 +51,7 @@
 | **Dataset Tools** | No | **Yes**, built-in tools for data collection |
 | **Dependencies** | Older | **Updated** (e.g., Mineflayer 4.29.0) |
 | **Error Handling** | Shows technical error message, difficult to troubleshoot | **Includes suggested fix** for easy fixing |
+| **Pathfinding** | Basic, standard robotic movement. | **Upgraded movements**, ability to use doors, fence gates, and swim better.|
 | **GUI** | Only mineserver | **Includes a GUI for changing settings and running the bot** |
 
 > [!Caution]
@@ -73,6 +74,7 @@
       <li><a href="https://ollama.com/download">Ollama Installed</a></li>
       <li><a href="https://docs.mistral.ai/getting-started/models/models_overview/">Mistral API Key</a></li>
       <li><a href="https://www.alibabacloud.com/help/en/model-studio/developer-reference/get-api-key">Qwen API Key [Intl.]</a> / <a href="https://help.aliyun.com/zh/model-studio/getting-started/first-api-call-to-qwen?">[cn]</a></li>
+      <li><a href="https://www.volcengine.com/docs/82379/1099455">Doubao API Key [Intl.]</a> / <a href="https://www.volcengine.com/docs/82379/1399008">[cn]</a></li>
       <li><a href="https://novita.ai/settings?utm_source=github_mindcraft&utm_medium=github_readme&utm_campaign=link#key-management">Novita AI API Key</a></li>
     </ul>
   </details>
@@ -82,13 +84,14 @@
 
 > [!Note]
 > An experimental Windows-only single-click installer + launcher, with extra features like a GUI editor for changing settings, is being worked on.
+> Additionally, there is also another single-click installer + launcher available [here](https://github.com/freeload101/MSC_MINDcraft_Single_Click). The single click installer auto-configures everything for you, and uses the optimal Andy-4 model based on your setup.
 
 1. Make sure you have the requirements above. <!-- Removed since `Mic` is the default for STT now, just added naudiodon in case Mic bugs out, since it has before.If you plan to use the STT (Speech-to-Text) feature, also review the "Installation Prerequisites" section regarding `naudiodon`. -->
 
 2. Download this repository's [latest release](https://github.com/mindcraft-ce/mindcraft-ce/releases/latest). Unzip it to your Downloads folder.
 
 > [!Note]
-> We recommend using pollinations.ai as it is the easiest to set up.
+> We recommend using pollinations.ai as it is the easiest to set up. <!-- I would recommend Andy-4 personally 😒 -->
 > If you're using it, you can skip step 3 below.
 
 3. Rename `keys.example.json` to `keys.json` and fill in your API keys (you only need one). The desired model is set in `andy.json` or other profiles. For other models refer to the table below.
@@ -99,7 +102,7 @@
 
 6. Run `node main.js` from the installed directory or the run.bat/sh file
 
-If you encounter issues, check the [FAQ](/FAQ.md) or find support on [discord](https://discord.gg/mp73p35dzC). If that fails, you can [create an issue](https://github.com/mindcraft-ce/mindcraft-ce/issues/new).
+If you encounter issues, check the [FAQ](/FAQ.md) or find support on [discord](https://discord.gg/DNnBQvCtwr). If that fails, you can [create an issue](https://github.com/mindcraft-ce/mindcraft-ce/issues/new).
 
 ## Model Customization
 
@@ -109,19 +112,20 @@ You can configure the agent's name, model, and prompts in their profile like `an
 
 | API | Config Variable | Example Model name | Docs |
 |------|------|------|------|
-| `openai` | `OPENAI_API_KEY` | `gpt-4o-mini` | [docs](https://platform.openai.com/docs/models) |
+| `openai` | `OPENAI_API_KEY` | `gpt-4.1-mini` | [docs](https://platform.openai.com/docs/models) |
 | `google` | `GEMINI_API_KEY` | `gemini-2.0-flash` | [docs](https://ai.google.dev/gemini-api/docs/models/gemini) |
-| `anthropic` | `ANTHROPIC_API_KEY` | `claude-3-haiku-20240307` | [docs](https://docs.anthropic.com/claude/docs/models-overview) |
-| `xai` | `XAI_API_KEY` | `grok-2-1212` | [docs](https://docs.x.ai/docs) |
+| `anthropic` | `ANTHROPIC_API_KEY` | `claude-3-5-haiku-20241022` | [docs](https://docs.anthropic.com/claude/docs/models-overview) |
+| `xai` | `XAI_API_KEY` | `grok-3-mini` | [docs](https://docs.x.ai/docs) |
 | `deepseek` | `DEEPSEEK_API_KEY` | `deepseek-chat` | [docs](https://api-docs.deepseek.com/) |
 | `ollama` (local) | n/a | `ollama/sweaterdog/andy-4` | [docs](https://ollama.com/library) |
 | `qwen` | `QWEN_API_KEY` | `qwen-max` | [Intl.](https://www.alibabacloud.com/help/en/model-studio/developer-reference/use-qwen-by-calling-api)/[cn](https://help.aliyun.com/zh/model-studio/getting-started/models) |
+| `doubao` | `DOUBAO_API_KEY` | `doubao-1-5-pro-32k-250115` | [cn](https://www.volcengine.com/docs/82379/1330310) |
 | `mistral` | `MISTRAL_API_KEY` | `mistral-large-latest` | [docs](https://docs.mistral.ai/getting-started/models/models_overview/) |
 | `replicate` | `REPLICATE_API_KEY` | `replicate/meta/meta-llama-3-70b-instruct` | [docs](https://replicate.com/collections/language-models) |
 | `groq` (not grok) | `GROQCLOUD_API_KEY` | `groq/mixtral-8x7b-32768` | [docs](https://console.groq.com/docs/models) |
 | `huggingface` | `HUGGINGFACE_API_KEY` | `huggingface/mistralai/Mistral-Nemo-Instruct-2407` | [docs](https://huggingface.co/models) |
 | `novita` | `NOVITA_API_KEY` | `novita/deepseek/deepseek-r1` | [docs](https://novita.ai/model-api/product/llm-api?utm_source=github_mindcraft&utm_medium=github_readme&utm_campaign=link) |
-| `openrouter` | `OPENROUTER_API_KEY` | `openrouter/anthropic/claude-3.5-sonnet` | [docs](https://openrouter.ai/models) |
+| `openrouter` | `OPENROUTER_API_KEY` | `openrouter/anthropic/claude-sonnet-4` | [docs](https://openrouter.ai/models) |
 | `glhf.chat` | `GHLF_API_KEY` | `glhf/hf:meta-llama/Llama-3.1-405B-Instruct` | [docs](https://glhf.chat/user-settings/api) |
 | `hyperbolic` | `HYPERBOLIC_API_KEY` | `hyperbolic/deepseek-ai/DeepSeek-V3` | [docs](https://docs.hyperbolic.xyz/docs/getting-started) |
 | `pollinations` | n/a | `pollinations/openai-large` | [docs](https://github.com/pollinations/pollinations/blob/master/APIDOCS.md) |
@@ -164,7 +168,7 @@ You can pass a string or an object for these fields. A model object must specify
 ```json
 "model": {
   "api": "openai",
-  "model": "gpt-4o",
+  "model": "gpt-4.1",
   "url": "https://api.openai.com/v1/",
   "params": {
     "max_tokens": 1000,
@@ -173,18 +177,18 @@ You can pass a string or an object for these fields. A model object must specify
 },
 "code_model": {
   "api": "openai",
-  "model": "gpt-4",
+  "model": "o4-mini",
   "url": "https://api.openai.com/v1/"
 },
 "vision_model": {
   "api": "openai",
-  "model": "gpt-4o",
+  "model": "gpt-4.1",
   "url": "https://api.openai.com/v1/"
 },
 "embedding": {
   "api": "openai",
   "url": "https://api.openai.com/v1/",
-  "model": "text-embedding-ada-002"
+  "model": "text-embedding-3-large"
 },
 "speak_model": {
   "api": "pollinations",
@@ -203,7 +207,7 @@ All apis have default models and urls, so those fields are optional. The `params
 
 Embedding models are used to embed and efficiently select relevant examples for conversation and coding.
 
-Supported Embedding APIs: `openai`, `google`, `replicate`, `huggingface`, `novita`
+Supported Embedding APIs: `openai`, `google`, `replicate`, `huggingface`, `novita`, `ollama`
 
 If you try to use an unsupported model, then it will default to a simple word-overlap method. Expect reduced performance, recommend mixing APIs to ensure embedding support.
 
@@ -284,9 +288,12 @@ If for some reason STT does not work, install naudiodon by running the command: 
 
 **STT Providers:**
 - **Groq**: You **need** a [GroqCloud API key](https://console.groq.com/keys) as Groq is used for Audio transcription
-- **Pollinations**: Free STT service, no API key required. Uses the `openai-audio` model via the Pollinations API
+- **Pollinations**: Free STT service, no API key required. Uses the `openai-audio` model via the Pollinations API. <!-- Why do we recommend this? I mean it is a TTS model, not a STT model... -->
 
 To use Groq STT, simply set `"stt_provider": "groq"` in your settings.js file. This provides an alternative to pollinations for speech-to-text transcription.
+> [!Note]
+> Pollinations can be buggy!
+> Using STT as `groq` is still free, and is far more stable and correct that pollinations.
 <!-- UPDATED BECAUSE POLLINATIONS IS NOW DEFAULT -->
 
 ## Dataset collection
