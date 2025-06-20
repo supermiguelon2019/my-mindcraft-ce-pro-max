@@ -22,6 +22,7 @@ import { Hyperbolic } from './hyperbolic.js';
 import { GLHF } from './glhf.js';
 import { OpenRouter } from './openrouter.js';
 import { Pollinations } from './pollinations.js';
+import { Doubao } from './doubao.js';
 import { VLLM } from './vllm.js';
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -147,7 +148,7 @@ export class Prompter {
                 profile.api = 'google';
             else if (profile.model.includes('vllm/'))
                 profile.api = 'vllm';
-            else if (profile.model.includes('gpt') || profile.model.includes('o1')|| profile.model.includes('o3'))
+            else if (profile.model.includes('gpt') || profile.model.includes('o1') || profile.model.includes('o3') || profile.model.includes('o4')) 
                 profile.api = 'openai';
             else if (profile.model.includes('claude'))
                 profile.api = 'anthropic';
@@ -167,6 +168,8 @@ export class Prompter {
                 profile.api = 'novita';
             else if (profile.model.includes('qwen'))
                 profile.api = 'qwen';
+            else if (profile.model.includes('doubao'))
+                profile.api = 'doubao';
             else if (profile.model.includes('grok'))
                 profile.api = 'xai';
             else if (profile.model.includes('deepseek'))
@@ -204,6 +207,8 @@ export class Prompter {
             model = new Novita(profile.model.replace('novita/', ''), profile.url, profile.params);
         else if (profile.api === 'qwen')
             model = new Qwen(profile.model, profile.url, profile.params);
+        else if (profile.api === 'doubao')
+            model = new Doubao(profile.model, profile.url, profile.params);
         else if (profile.api === 'xai')
             model = new Grok(profile.model, profile.url, profile.params);
         else if (profile.api === 'deepseek')
