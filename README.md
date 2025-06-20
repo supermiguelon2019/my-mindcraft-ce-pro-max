@@ -121,7 +121,7 @@ You can configure the agent's name, model, and prompts in their profile like `an
 | `doubao` | `DOUBAO_API_KEY` | `doubao-1-5-pro-32k-250115` | [cn](https://www.volcengine.com/docs/82379/1330310) |
 | `mistral` | `MISTRAL_API_KEY` | `mistral-large-latest` | [docs](https://docs.mistral.ai/getting-started/models/models_overview/) |
 | `replicate` | `REPLICATE_API_KEY` | `replicate/meta/meta-llama-3-70b-instruct` | [docs](https://replicate.com/collections/language-models) |
-| `groq` (not grok) | `GROQCLOUD_API_KEY` | `groq/mixtral-8x7b-32768` | [docs](https://console.groq.com/docs/models) |
+| `groq` <small>(not grok)</small> | `GROQCLOUD_API_KEY` | `groq/mixtral-8x7b-32768` | [docs](https://console.groq.com/docs/models) |
 | `huggingface` | `HUGGINGFACE_API_KEY` | `huggingface/mistralai/Mistral-Nemo-Instruct-2407` | [docs](https://huggingface.co/models) |
 | `novita` | `NOVITA_API_KEY` | `novita/deepseek/deepseek-r1` | [docs](https://novita.ai/model-api/product/llm-api?utm_source=github_mindcraft&utm_medium=github_readme&utm_campaign=link) |
 | `openrouter` | `OPENROUTER_API_KEY` | `openrouter/anthropic/claude-sonnet-4` | [docs](https://openrouter.ai/models) |
