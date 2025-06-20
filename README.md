@@ -51,6 +51,7 @@
 | **Dataset Tools** | No | **Yes**, built-in tools for data collection |
 | **Dependencies** | Older | **Updated** (e.g., Mineflayer 4.29.0) |
 | **Error Handling** | Shows technical error message, difficult to troubleshoot | **Includes suggested fix** for easy fixing |
+| **GUI** | Only mineserver | **Includes a GUI for changing settings and running the bot** |
 
 > [!Caution]
 > Do not connect this bot to public servers with coding enabled. This project allows an LLM to write/execute code on your computer. The code is sandboxed, but still vulnerable to injection attacks. Code writing is disabled by default. You can enable it by setting <code>allow_insecure_coding</code> to <code>true</code> in <code>settings.js</code>. Ye be warned.
@@ -92,17 +93,17 @@
 
 3. Rename `keys.example.json` to `keys.json` and fill in your API keys (you only need one). The desired model is set in `andy.json` or other profiles. For other models refer to the table below.
 
-4. In terminal/command prompt, run `npm install` from the installed directory. (Note: If `naudiodon` fails to build and you don't need STT, you can usually proceed.)
+4. In terminal/command prompt, run `npm install` from the installed directory or install.bat/sh file. (Note: If `naudiodon` fails to build and you don't need STT, you can usually proceed.)
 
 5. Start a minecraft world and open it to LAN on localhost port `55916`
 
-6. Run `node main.js` from the installed directory
+6. Run `node main.js` from the installed directory or the run.bat/sh file
 
 If you encounter issues, check the [FAQ](/FAQ.md) or find support on [discord](https://discord.gg/mp73p35dzC). If that fails, you can [create an issue](https://github.com/mindcraft-ce/mindcraft-ce/issues/new).
 
 ## Model Customization
 
-You can configure project details in `settings.js`. [See file.](settings.js)
+You can configure project details in `settings.js` and in the GUI. [See file.](settings.js)
 
 You can configure the agent's name, model, and prompts in their profile like `andy.json` with the `model` field. For comprehensive details, see [Model Specifications](#model-specifications).
 
