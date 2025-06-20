@@ -71,7 +71,12 @@ const settings = {
     "log_reasoning_data": false, // Logs only reasoning inputs / outputs
     "log_vision_data": false, // Logs only vision inputs / outputs
 
-}
+};
+
+// Import required modules
+import * as path from 'path';
+import * as fs from 'fs';
+import process from 'node:process';
 
 // these environment variables override certain settings
 if (process.env.SETTINGS_PATH) {
