@@ -1,3 +1,7 @@
+import ZeroMd from '../node_modules/zero-md/src/lib/zero-md.js';
+
+customElements.define('zero-md', ZeroMd);
+
 // Persist details open/closed state
 document.addEventListener('DOMContentLoaded', () => {
     // Load saved states
@@ -267,4 +271,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.close').addEventListener('click', () => {
         document.getElementById('profileModal').style.display = 'none';
     });
+    const mdViewer = document.querySelector('zero-md');
+    mdViewer.src = "../README.md";
 });

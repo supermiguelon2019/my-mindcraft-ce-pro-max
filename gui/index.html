@@ -181,11 +181,11 @@
             justify-content: center;
             gap: 10px;
             position: sticky;
-            bottom: 20px;
+            bottom: 100px;
             background: #2d2d2d;
             padding: 10px;
             border-radius: 8px;
-            width: 52.5%;
+            width: 400px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -288,319 +288,470 @@
             gap: 10px; /* espacio entre botones */
             justify-content: center; /* o center, o space-between según quieras */
             align-items: center;
-}
+        }
+        /* Style the tab */
+        .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+        }
 
+        /* Style the buttons that are used to open the tab content */
+        .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 6px 16px;
+        transition: 0.3s;
+        }
 
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+        background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+        background-color: #ccc;
+        }
+
+        /* Style the tab content */
+        .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border-top: none;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; /* Prevents scrolling */
+        }
+
+        #titlebar {
+            height: 40px;
+            background-color: #333;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+        }
+
+        .tabcontent {
+            display: none;
+            height: calc(100vh - 30px); /* Ajusta según el tamaño de #titlebar y pestañas */
+            overflow-y: hidden;
+            padding: 16px;
+        }
+
+        #docs {
+            flex: 1;
+            width: 100%; /* Reduced from 95% */
+            height: calc(100% - 120px); /* Account for titlebar */
+
+            background-color: #0d1117;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 20px;
+            padding-bottom: 20px; /* Padding interno para que el texto no esté pegado a los bordes */
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+            position: relative;
+        }
+        #docs::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
+        zero-md {
+            width: calc(100% - 40px); /* Ajusta el ancho para que no se salga del contenedor */
+            max-width: 100%;
+            box-sizing: border-box;
+            padding: 0 16px; /* Padding interno para que el texto no esté pegado a los bordes */
+        }
+        .tab {
+            background-color: #444;
+            padding: 5px;
+            display: flex;
+            gap: 5px;
+        }
+
+        #settings-container {
+            overflow-y: hidden;
+        }
 
     </style>
 </head>
 <body>
     <div id="titlebar">
-        <div id="title">MindCraft-CE Settings</div>
+        <div id="title">MindCraft-CE</div>
         <div id="window-controls">
             <button class="window-control" id="minimize-button">─</button>
             <button class="window-control" id="maximize-button">□</button>
             <button class="window-control" id="close-button">✕</button>
         </div>
     </div>
-    
-    <div class="container">
-        <details class="setting-group" open>
-            <summary>Connection Settings</summary>
-            <div class="settings-content">
-                <div class="setting-item">
-                    <label for="minecraft_version" title="Supports up to 1.21.4">Minecraft Version:</label>
-                    <input type="text" id="minecraft_version" />
-                </div>
-            <div class="setting-item">
-                <label for="host" title="Use 'localhost' or your IP address">Host:</label>
-                <input type="text" id="host" />
-            </div>
-            <div class="setting-item">
-                <label for="port">Port:</label>
-                <input type="number" id="port" />
-            </div>
-            <div class="setting-item">
-                <label for="auth" title="Choose between offline or Microsoft authentication">Authentication:</label>
-                <select id="auth">
-                    <option value="offline">Offline</option>
-                    <option value="microsoft">Microsoft</option>
-                </select>
-            </div>            </div>
-        </details>
+    <div class="tab">
 
-        <details class="setting-group">
-            <summary>Mind Server Settings</summary>
-            <div class="settings-content">
-                <div class="setting-item">
-                    <label for="host_mindserver" title="If true, the mindserver will be hosted on this machine">Host Mind Server:</label>
-                    <input type="checkbox" id="host_mindserver" />
-            </div>
-            <div class="setting-item">
-                <label for="mindserver_host">Mind Server Host:</label>
-                <input type="text" id="mindserver_host" />
-            </div>
-            <div class="setting-item">
-                <label for="mindserver_port">Mind Server Port:</label>
-                <input type="number" id="mindserver_port" />
-            </div>
-        </div>
-        </details>
+        <script>
+            function openMenu(evt, menuName) { 
+                // Declare all variables
+                var i, tabcontent, tablinks;
 
-        <details class="setting-group">
-            <summary>Profile Settings</summary>
-            <div class="settings-content">
-                <div class="setting-item">
-                    <label for="base_profile" title="Base profile shared by all bots">Base Profile:</label>
-                    <select id="base_profile">
-                        <option value="./profiles/defaults/survival.json">Survival</option>
-                        <option value="./profiles/defaults/creative.json">Creative</option>
-                        <option value="./profiles/defaults/god_mode.json">God Mode</option>
-                    </select>
-                </div>
-                <div class="setting-item">
-                    <label for="profiles" title="Select multiple profiles. Using more than 1 requires messaging each bot individually">Profiles:</label>
-                    <select id="profiles" multiple></select>
-                </div>
-                <!-- Add profile button -->
-        <div class="setting-item">
-            <div class="button-group">
-                <button id="addProfile">Add Profile</button>
-                <button id="deleteProfile">Delete Profile</button>
-            </div>
+                // Get all elements with class="tabcontent" and hide them
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
 
-        </div>
+                // Get all elements with class="tablinks" and remove the class "active"
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
 
-        <!-- Profile modal -->
-        <div id="profileModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2 id="profileModalTitle">Edit Profile</h2>
-                <form id="profileForm">
-                    <div class="setting-item">
-                        <label for="profileName">Profile Name:</label>
-                        <input type="text" id="profileName" required>
-                    </div>
-                    <div class="setting-item">
-                        <label for="profileModel">Model:</label>
-                        <input type="text" id="profileModel" required>
-                    </div>
-                    <div class="setting-item">
-                        <label for="profileEmbedding">Embedding:</label>
-                        <input type="text" id="profileEmbedding">
-                    </div>
-                    <div class="button-container">
-                        <button type="button" id="saveProfile">Save</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                // Show the current tab, and add an "active" class to the button that opened the tab
+                document.getElementById(menuName).style.display = "block"; 
+                evt.currentTarget.className += " active";
+            }
+        </script>
 
-            </div>
-        </details>
-
-        <details class="setting-group">
-            <summary>General Settings</summary>
-            <div class="settings-content">
-                <div class="setting-item">
-                    <label for="plugins" title="Add plugins, e.g. pre-installed plugin: Dance">Plugins:</label>
-                    <input type="text" id="plugins" />
-                </div>
-                <div class="setting-item">
-                    <label for="load_memory" title="Load memory from previous session">Load Memory:</label>
-                    <input type="checkbox" id="load_memory" />
-                </div>
-                <div class="setting-item">
-                    <label for="init_message" title="Message sent to all bots on spawn">Initial Message:</label>
-                    <input type="text" id="init_message" />
-                </div>
-                <div class="setting-item">
-                    <label for="only_chat_with" title="Users that bots listen to. If empty, chat publicly">Only Chat With:</label>
-                    <input type="text" id="only_chat_with" />
-                </div>
-            </div>
-        </details>
-
-        <details class="setting-group">
-            <summary>Language & Display</summary>
-            <div class="settings-content">
-                <div class="setting-item">
-                    <label for="language" title="Translate to/from this language">Language:</label>
-                    <input type="text" id="language" />
-                </div>
-                <div class="setting-item">
-                    <label for="show_bot_views" title="Show bot's view in browser">Show Bot Views:</label>
-                    <input type="checkbox" id="show_bot_views" />
-                </div>
-            </div>
-        </details>
-
-        <details class="setting-group">
-            <summary>Security Settings</summary>
-            <div class="settings-content">
-                <div class="setting-item">
-                    <label for="allow_insecure_coding" title="Allows newAction command. Enable at own risk">Allow Insecure Coding:</label>
-                    <input type="checkbox" id="allow_insecure_coding" />
-                </div>
-                <div class="setting-item">
-                    <label for="allow_vision" title="Allows vision model to interpret screenshots">Allow Vision:</label>
-                    <input type="checkbox" id="allow_vision" />
-                </div>
-                <div class="setting-item">
-                    <label for="vision_mode">Vision Mode:</label>
-                    <select id="vision_mode">
-                        <option value="off">Off</option>
-                        <option value="prompted">Prompted</option>
-                        <option value="always">Always</option>
-                    </select>
-                </div>
-                <div class="setting-item">
-                    <label for="blocked_actions" title="Commands to disable and remove from docs">Blocked Actions:</label>
-                    <input type="text" id="blocked_actions" />
-                </div>
-            </div>
-        </details>
-
-        <details class="setting-group">
-            <summary>Performance Settings</summary>
-            <div class="settings-content">
-                <div class="setting-item">
-                    <label for="code_timeout_mins" title="Minutes code is allowed to run. -1 for no timeout">Code Timeout (mins):</label>
-                    <input type="number" id="code_timeout_mins" />
-                </div>
-                <div class="setting-item">
-                    <label for="relevant_docs_count" title="Number of relevant code function docs to select. -1 for all">Relevant Docs Count:</label>
-                    <input type="number" id="relevant_docs_count" />
-                </div>
-            </div>
-        </details>
-
-        <details class="setting-group">
-            <summary>Chat Settings</summary>
-            <div class="settings-content">
-                <div class="setting-item">
-                    <label for="max_messages" title="Max number of messages to keep in context">Max Messages:</label>
-                    <input type="number" id="max_messages" />
-                </div>
-                <div class="setting-item">
-                    <label for="num_examples" title="Number of examples to give to the model">Number of Examples:</label>
-                    <input type="number" id="num_examples" />
-                </div>
-                <div class="setting-item">
-                    <label for="max_commands" title="Max commands in consecutive responses. -1 for no limit">Max Commands:</label>
-                    <input type="number" id="max_commands" />
-                </div>
-                <div class="setting-item">
-                    <label for="verbose_commands" title="Show full command syntax">Verbose Commands:</label>
-                    <input type="checkbox" id="verbose_commands" />
-                </div>
-                <div class="setting-item">
-                    <label for="narrate_behavior" title="Chat simple automatic actions">Narrate Behavior:</label>
-                    <input type="checkbox" id="narrate_behavior" />
-                </div>
-                <div class="setting-item">
-                    <label for="chat_bot_messages" title="Publicly chat messages to other bots">Chat Bot Messages:</label>
-                    <input type="checkbox" id="chat_bot_messages" />
-                </div>
-            </div>
-        </details>
-
-        <details class="setting-group">
-            <summary>Speech Settings</summary>
-            <div class="settings-content">
-                <div class="setting-item">
-                    <label for="speak" title="Enable text-to-speech for all bots">Enable Speech:</label>
-                    <input type="checkbox" id="speak" />
-                </div>
-                <div class="setting-item">
-                    <label for="stt_transcription" title="Enable speech-to-text transcription">STT Transcription:</label>
-                    <input type="checkbox" id="stt_transcription" />
-                </div>
-                <div class="setting-item">
-                    <label for="stt_provider" title="Speech-to-text provider">STT Provider:</label>
-                    <select id="stt_provider">
-                        <option value="pollinations">Pollinations (Free)</option>
-                        <option value="groq">Groq (API Key Required)</option>
-                    </select>
-                </div>
-                <div class="setting-item">
-                    <label for="stt_username">STT Username:</label>
-                    <input type="text" id="stt_username" />
-                </div>
-                <div class="setting-item">
-                    <label for="stt_agent_name" title="If empty, sends STT to all bots">STT Agent Name:</label>
-                    <input type="text" id="stt_agent_name" />
-                </div>
-            </div>
-        </details>
-
-        <details class="setting-group">
-            <summary>STT Audio Settings</summary>
-            <div class="settings-content">
-                <div class="setting-item">
-                    <label for="stt_rms_threshold" title="Audio level threshold">RMS Threshold:</label>
-                    <input type="number" id="stt_rms_threshold" />
-                </div>
-                <div class="setting-item">
-                    <label for="stt_silence_duration" title="Silence duration before stopping (ms)">Silence Duration (ms):</label>
-                    <input type="number" id="stt_silence_duration" />
-                </div>
-                <div class="setting-item">
-                    <label for="stt_min_audio_duration" title="Minimum audio duration in seconds">Min Audio Duration (s):</label>
-                    <input type="number" id="stt_min_audio_duration" step="0.1" />
-                </div>
-                <div class="setting-item">
-                    <label for="stt_max_audio_duration" title="Maximum audio duration in seconds">Max Audio Duration (s):</label>
-                    <input type="number" id="stt_max_audio_duration" />
-                </div>
-                <div class="setting-item">
-                    <label for="stt_debug_audio" title="Enable audio debugging">Debug Audio:</label>
-                    <input type="checkbox" id="stt_debug_audio" />
-                </div>
-                <div class="setting-item">
-                    <label for="stt_cooldown_ms" title="Minimum time between recordings (ms)">Cooldown (ms):</label>
-                    <input type="number" id="stt_cooldown_ms" />
-                </div>
-                <div class="setting-item">
-                    <label for="stt_speech_threshold_ratio" title="Speech detection threshold">Speech Threshold Ratio:</label>
-                    <input type="number" id="stt_speech_threshold_ratio" step="0.01" />
-                </div>
-                <div class="setting-item">
-                    <label for="stt_consecutive_speech_samples" title="Number of consecutive speech samples needed">Consecutive Speech Samples:</label>
-                    <input type="number" id="stt_consecutive_speech_samples" />
-                </div>
-            </div>
-        </details>
-
-        <details class="setting-group">
-            <summary>Logging Settings</summary>
-            <div class="settings-content">
-                <div class="setting-item">
-                    <label for="log_normal_data" title="Log all inputs/outputs without reasoning/vision data">Log Normal Data:</label>
-                    <input type="checkbox" id="log_normal_data" />
-                </div>
-                <div class="setting-item">
-                    <label for="log_reasoning_data" title="Log only reasoning inputs/outputs">Log Reasoning Data:</label>
-                    <input type="checkbox" id="log_reasoning_data" />
-                </div>
-                <div class="setting-item">
-                    <label for="log_vision_data" title="Log only vision inputs/outputs">Log Vision Data:</label>
-                    <input type="checkbox" id="log_vision_data" />
-                </div>
-            </div>
-        </details>
+        <button class="tablinks" onclick="openMenu(event, 'home')" id="defaultOpen">Home</button>
+        <button class="tablinks" onclick="openMenu(event, 'settings')">Settings</button>
+        <button class="tablinks" onclick="openMenu(event, 'docs')">Docs</button>
 
         
 
-        <div class="button-container">
-            <button id="stopButton">Stop</button>
-            <button id="resetButton">Reset</button>
-            <button id="startButton">Start</button>
+    </div>
+    <div id="content-area">
+        <div id="home" class="tabcontent">
+            <div style="text-align: center;">
+                <h1>Welcome to MindCraft-CE</h1>
+            </div>
+            <div class="setting-item">
+                <label for="minecraft_version" title="Supports up to 1.21.4">Minecraft Version:</label>
+                <input type="text" id="home_minecraft_version" />
+            </div>
+            <div class="setting-item">
+                <label for="host" title="Use 'localhost' or your IP address">Host:</label>
+                <input type="text" id="home_host" />
+            </div>
+            <div class="setting-item">
+                <label for="port">Port:</label>
+                <input type="number" id="home_port" />
+            </div>
         </div>
+        <div id="settings" class="tabcontent">
+            <div class="container" >
+                <details class="setting-group" open>
+                    <summary>Connection Settings</summary>
+                    <div class="settings-content">
+                        <div class="setting-item">
+                            <label for="minecraft_version" title="Supports up to 1.21.4">Minecraft Version:</label>
+                            <input type="text" id="minecraft_version" />
+                        </div>
+                    <div class="setting-item">
+                        <label for="host" title="Use 'localhost' or your IP address">Host:</label>
+                        <input type="text" id="host" />
+                    </div>
+                    <div class="setting-item">
+                        <label for="port">Port:</label>
+                        <input type="number" id="port" />
+                    </div>
+                    <div class="setting-item">
+                        <label for="auth" title="Choose between offline or Microsoft authentication">Authentication:</label>
+                        <select id="auth">
+                            <option value="offline">Offline</option>
+                            <option value="microsoft">Microsoft</option>
+                        </select>
+                    </div>            </div>
+                </details>
 
-        <div id="status" class="status" style="display: none;"></div>
+                <details class="setting-group">
+                    <summary>Mind Server Settings</summary>
+                    <div class="settings-content">
+                        <div class="setting-item">
+                            <label for="host_mindserver" title="If true, the mindserver will be hosted on this machine">Host Mind Server:</label>
+                            <input type="checkbox" id="host_mindserver" />
+                    </div>
+                    <div class="setting-item">
+                        <label for="mindserver_host">Mind Server Host:</label>
+                        <input type="text" id="mindserver_host" />
+                    </div>
+                    <div class="setting-item">
+                        <label for="mindserver_port">Mind Server Port:</label>
+                        <input type="number" id="mindserver_port" />
+                    </div>
+                </div>
+                </details>
+
+                <details class="setting-group">
+                    <summary>Profile Settings</summary>
+                    <div class="settings-content">
+                        <div class="setting-item">
+                            <label for="base_profile" title="Base profile shared by all bots">Base Profile:</label>
+                            <select id="base_profile">
+                                <option value="./profiles/defaults/survival.json">Survival</option>
+                                <option value="./profiles/defaults/creative.json">Creative</option>
+                                <option value="./profiles/defaults/god_mode.json">God Mode</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label for="profiles" title="Select multiple profiles. Using more than 1 requires messaging each bot individually">Profiles:</label>
+                            <select id="profiles" multiple></select>
+                        </div>
+                        <!-- Add profile button -->
+                <div class="setting-item">
+                    <div class="button-group">
+                        <button id="addProfile">Add Profile</button>
+                        <button id="deleteProfile">Delete Profile</button>
+                    </div>
+
+                </div>
+
+                <!-- Profile modal -->
+                <div id="profileModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h2 id="profileModalTitle">Edit Profile</h2>
+                        <form id="profileForm">
+                            <div class="setting-item">
+                                <label for="profileName">Profile Name:</label>
+                                <input type="text" id="profileName" required>
+                            </div>
+                            <div class="setting-item">
+                                <label for="profileModel">Model:</label>
+                                <input type="text" id="profileModel" required>
+                            </div>
+                            <div class="setting-item">
+                                <label for="profileEmbedding">Embedding:</label>
+                                <input type="text" id="profileEmbedding">
+                            </div>
+                            <div class="button-container">
+                                <button type="button" id="saveProfile">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                    </div>
+                </details>
+
+                <details class="setting-group">
+                    <summary>General Settings</summary>
+                    <div class="settings-content">
+                        <div class="setting-item">
+                            <label for="plugins" title="Add plugins, e.g. pre-installed plugin: Dance">Plugins:</label>
+                            <input type="text" id="plugins" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="load_memory" title="Load memory from previous session">Load Memory:</label>
+                            <input type="checkbox" id="load_memory" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="init_message" title="Message sent to all bots on spawn">Initial Message:</label>
+                            <input type="text" id="init_message" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="only_chat_with" title="Users that bots listen to. If empty, chat publicly">Only Chat With:</label>
+                            <input type="text" id="only_chat_with" />
+                        </div>
+                    </div>
+                </details>
+
+                <details class="setting-group">
+                    <summary>Language & Display</summary>
+                    <div class="settings-content">
+                        <div class="setting-item">
+                            <label for="language" title="Translate to/from this language">Language:</label>
+                            <input type="text" id="language" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="show_bot_views" title="Show bot's view in browser">Show Bot Views:</label>
+                            <input type="checkbox" id="show_bot_views" />
+                        </div>
+                    </div>
+                </details>
+
+                <details class="setting-group">
+                    <summary>Security Settings</summary>
+                    <div class="settings-content">
+                        <div class="setting-item">
+                            <label for="allow_insecure_coding" title="Allows newAction command. Enable at own risk">Allow Insecure Coding:</label>
+                            <input type="checkbox" id="allow_insecure_coding" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="allow_vision" title="Allows vision model to interpret screenshots">Allow Vision:</label>
+                            <input type="checkbox" id="allow_vision" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="vision_mode">Vision Mode:</label>
+                            <select id="vision_mode">
+                                <option value="off">Off</option>
+                                <option value="prompted">Prompted</option>
+                                <option value="always">Always</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label for="blocked_actions" title="Commands to disable and remove from docs">Blocked Actions:</label>
+                            <input type="text" id="blocked_actions" />
+                        </div>
+                    </div>
+                </details>
+
+                <details class="setting-group">
+                    <summary>Performance Settings</summary>
+                    <div class="settings-content">
+                        <div class="setting-item">
+                            <label for="code_timeout_mins" title="Minutes code is allowed to run. -1 for no timeout">Code Timeout (mins):</label>
+                            <input type="number" id="code_timeout_mins" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="relevant_docs_count" title="Number of relevant code function docs to select. -1 for all">Relevant Docs Count:</label>
+                            <input type="number" id="relevant_docs_count" />
+                        </div>
+                    </div>
+                </details>
+
+                <details class="setting-group">
+                    <summary>Chat Settings</summary>
+                    <div class="settings-content">
+                        <div class="setting-item">
+                            <label for="max_messages" title="Max number of messages to keep in context">Max Messages:</label>
+                            <input type="number" id="max_messages" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="num_examples" title="Number of examples to give to the model">Number of Examples:</label>
+                            <input type="number" id="num_examples" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="max_commands" title="Max commands in consecutive responses. -1 for no limit">Max Commands:</label>
+                            <input type="number" id="max_commands" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="verbose_commands" title="Show full command syntax">Verbose Commands:</label>
+                            <input type="checkbox" id="verbose_commands" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="narrate_behavior" title="Chat simple automatic actions">Narrate Behavior:</label>
+                            <input type="checkbox" id="narrate_behavior" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="chat_bot_messages" title="Publicly chat messages to other bots">Chat Bot Messages:</label>
+                            <input type="checkbox" id="chat_bot_messages" />
+                        </div>
+                    </div>
+                </details>
+
+                <details class="setting-group">
+                    <summary>Speech Settings</summary>
+                    <div class="settings-content">
+                        <div class="setting-item">
+                            <label for="speak" title="Enable text-to-speech for all bots">Enable Speech:</label>
+                            <input type="checkbox" id="speak" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="stt_transcription" title="Enable speech-to-text transcription">STT Transcription:</label>
+                            <input type="checkbox" id="stt_transcription" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="stt_provider" title="Speech-to-text provider">STT Provider:</label>
+                            <select id="stt_provider">
+                                <option value="pollinations">Pollinations (Free)</option>
+                                <option value="groq">Groq (API Key Required)</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label for="stt_username">STT Username:</label>
+                            <input type="text" id="stt_username" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="stt_agent_name" title="If empty, sends STT to all bots">STT Agent Name:</label>
+                            <input type="text" id="stt_agent_name" />
+                        </div>
+                    </div>
+                </details>
+
+                <details class="setting-group">
+                    <summary>STT Audio Settings</summary>
+                    <div class="settings-content">
+                        <div class="setting-item">
+                            <label for="stt_rms_threshold" title="Audio level threshold">RMS Threshold:</label>
+                            <input type="number" id="stt_rms_threshold" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="stt_silence_duration" title="Silence duration before stopping (ms)">Silence Duration (ms):</label>
+                            <input type="number" id="stt_silence_duration" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="stt_min_audio_duration" title="Minimum audio duration in seconds">Min Audio Duration (s):</label>
+                            <input type="number" id="stt_min_audio_duration" step="0.1" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="stt_max_audio_duration" title="Maximum audio duration in seconds">Max Audio Duration (s):</label>
+                            <input type="number" id="stt_max_audio_duration" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="stt_debug_audio" title="Enable audio debugging">Debug Audio:</label>
+                            <input type="checkbox" id="stt_debug_audio" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="stt_cooldown_ms" title="Minimum time between recordings (ms)">Cooldown (ms):</label>
+                            <input type="number" id="stt_cooldown_ms" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="stt_speech_threshold_ratio" title="Speech detection threshold">Speech Threshold Ratio:</label>
+                            <input type="number" id="stt_speech_threshold_ratio" step="0.01" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="stt_consecutive_speech_samples" title="Number of consecutive speech samples needed">Consecutive Speech Samples:</label>
+                            <input type="number" id="stt_consecutive_speech_samples" />
+                        </div>
+                    </div>
+                </details>
+
+                <details class="setting-group">
+                    <summary>Logging Settings</summary>
+                    <div class="settings-content">
+                        <div class="setting-item">
+                            <label for="log_normal_data" title="Log all inputs/outputs without reasoning/vision data">Log Normal Data:</label>
+                            <input type="checkbox" id="log_normal_data" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="log_reasoning_data" title="Log only reasoning inputs/outputs">Log Reasoning Data:</label>
+                            <input type="checkbox" id="log_reasoning_data" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="log_vision_data" title="Log only vision inputs/outputs">Log Vision Data:</label>
+                            <input type="checkbox" id="log_vision_data" />
+                        </div>
+                    </div>
+                </details>
+
+                <div class="button-container">
+                <button id="stopButton">Stop</button>
+                <button id="resetButton">Reset</button>
+                <button id="startButton">Start</button>
+            </div>
+
+                <div id="status" class="status" style="display: none;"></div>
+            </div>
+        </div>
     </div>
 
-    <script src="renderer.js"></script>
+    <div id="docs" class="tabcontent">
+        <zero-md></zero-md>
+    </div>
+    <script type="module" src="renderer.js"></script>
+    <script>
+            // Get the element with id="defaultOpen" and click on it
+            document.getElementById("defaultOpen").click();
+    </script>
 </body>
 </html>

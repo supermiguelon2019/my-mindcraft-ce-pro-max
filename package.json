@@ -13,8 +13,8 @@
         "google-translate-api-x": "^10.7.1",
         "groq-sdk": "^0.5.0",
         "minecraft-data": "^3.78.0",
-        "mineflayer": "^4.29.0",
-        "mineflayer-armor-manager": "^2.0.1",
+        "mineflayer": "^4.0.0",
+        "mineflayer-armor-manager": "^1.4.2",
         "mineflayer-auto-eat": "^3.3.6",
         "mineflayer-collectblock": "^1.4.1",
         "mineflayer-pathfinder": "^2.4.5",
@@ -31,7 +31,8 @@
         "three": "^0.128.0",
         "vec3": "^0.1.10",
         "wav": "^1.0.2",
-        "yargs": "^17.7.2"
+        "yargs": "^17.7.2",
+        "zero-md": "^3.1.7"
     },
     "optionalDependencies": {
         "mic": "^2.1.2",
