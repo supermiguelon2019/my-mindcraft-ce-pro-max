@@ -238,7 +238,18 @@ function saveProfile() {
     window.electronAPI.saveProfile({ path, content: profile })
         .then(() => {
             document.getElementById('profileModal').style.display = 'none';
-            window.location.reload(); // Refresh profile list
+            //window.location.reload(); // Refresh profile list
+            //only reload list, not the entire page
+            window.electronAPI.getAvailableProfiles().then(profiles => {
+                const profileSelect = document.getElementById('profiles');
+                profileSelect.innerHTML = ''; // Clear existing options
+                profiles.forEach(profile => {
+                    const option = document.createElement('option');
+                    option.value = profile;
+                    option.textContent = profile.replace(/^\.\//, '').replace('.json', '');
+                    profileSelect.appendChild(option);
+                });
+            });
         })
         .catch(error => showStatus('Error saving profile: ' + error.message, 'error'));
 }
@@ -253,7 +264,17 @@ function deleteProfile() {
             profiles.forEach((profile) => {
                 console.log('Deleting profile:', profile);
                 window.electronAPI.deleteProfile(profile);
-                window.location.reload(); // Refresh profile list
+                //window.location.reload(); // Refresh profile list
+                window.electronAPI.getAvailableProfiles().then(profiles => {
+                    const profileSelect = document.getElementById('profiles');
+                    profileSelect.innerHTML = ''; // Clear existing options
+                    profiles.forEach(profile => {
+                        const option = document.createElement('option');
+                        option.value = profile;
+                        option.textContent = profile.replace(/^\.\//, '').replace('.json', '');
+                        profileSelect.appendChild(option);
+                    });
+                });
             });
         } else {
             showStatus('No profiles to delete', 'error');

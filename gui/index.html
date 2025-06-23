@@ -181,11 +181,11 @@
             justify-content: center;
             gap: 10px;
             position: sticky;
-            bottom: 100px;
+            bottom: 50px;
             background: #2d2d2d;
             padding: 10px;
             border-radius: 8px;
-            width: 400px;
+            width: 380px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -422,11 +422,10 @@
             }
         </script>
 
-        <button class="tablinks" onclick="openMenu(event, 'home')" id="defaultOpen">Home</button>
-        <button class="tablinks" onclick="openMenu(event, 'settings')">Settings</button>
-        <button class="tablinks" onclick="openMenu(event, 'docs')">Docs</button>
+        <button class="tablinks" onclick="openMenu(event, 'home')" id="homeButton">Home</button>
+        <button class="tablinks" onclick="openMenu(event, 'settings')" id="settingsButton">Settings</button>
+        <button class="tablinks" onclick="openMenu(event, 'docs')" id="docsButton">Docs</button>
 
-        
 
     </div>
     <div id="content-area">
@@ -750,8 +749,8 @@
     </div>
     <script type="module" src="renderer.js"></script>
     <script>
-            // Get the element with id="defaultOpen" and click on it
-            document.getElementById("defaultOpen").click();
+            // Get the element with id="homeButton" and click on it
+            document.getElementById("homeButton").click();
     </script>
 </body>
 </html>
