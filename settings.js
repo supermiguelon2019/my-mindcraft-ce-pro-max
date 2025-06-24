@@ -10,7 +10,7 @@ const settings = {
     "mindserver_port": 8080,
     
     // the base profile is shared by all bots for default prompts/examples/modes
-    "base_profile": "./profiles/defaults/survival.json", // also see creative.json, god_mode.json
+    "base_profile": "./profiles/defaults/survival.json", // also see creative.json, god_mode.json, and personality.json is really fun.
     "profiles": [
         "./andy.json",
         // "./profiles/gpt.json",
@@ -47,6 +47,13 @@ const settings = {
     "verbose_commands": true, // show full command syntax
     "narrate_behavior": true, // chat simple automatic actions ('Picking up item!')
     "chat_bot_messages": true, // publicly chat messages to other bots
+
+    // Allows for truly autonomous playing
+    "auto_idle_trigger": {
+      "enabled": false,
+      "timeout_secs": 10, // 10 seconds inactivity before prompting
+      "message": "do something!"
+    },
 
     "speak": true,
     // allows all bots to speak through text-to-speech. format: {provider}/{model}/{voice}. if set to "system" it will use system text-to-speech, which works on windows and mac, but on linux you need to `apt install espeak`.

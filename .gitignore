@@ -3,6 +3,7 @@
 .github/
 node_modules/
 package-lock.json
+logs/venv
 code_records/
 scratch.js
 bots/**/action-code/**
