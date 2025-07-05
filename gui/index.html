@@ -53,10 +53,11 @@
 
         #close-button:hover {
             background: #e81123;
-        }        .container {
+        }        
+        .container {
             flex: 1;
             width: 90%; /* Reduced from 95% */
-            height: calc(100% - 52px); /* Account for titlebar */
+            height: calc(100% - 150px); /* Account for titlebar */
             margin: 10px auto; /* Already centered */
             background-color: #2d2d2d;
             padding: 20px;
@@ -66,8 +67,6 @@
             scrollbar-width: none; /* Firefox */
             -ms-overflow-style: none; /* IE and Edge */
             position: relative;
-            min-height: calc(100vh - 100px);
-            padding-bottom: 80px; /* Space for buttons */
         }
         .container::-webkit-scrollbar {
             display: none; /* Chrome, Safari and Opera */
@@ -386,6 +385,28 @@
             overflow-y: hidden;
         }
 
+        /* Hide scrollbar but allow scrolling in profile modal */
+        #profileModal {
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+        #profileModal::-webkit-scrollbar {
+            display: none;
+        }
+        #profileModal {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;     /* Firefox */
+        }
+        .collapsible-model-group { display: flex; flex-direction: column; gap: 10px; }
+.collapsible-model { display: flex; flex-direction: column; align-items: stretch; gap: 2px; }
+.collapsible-model label { min-width: 110px; margin-bottom: 2px; }
+.main-model-row { display: flex; align-items: center; width: 100%; gap: 8px; }
+.collapsible-model .main-model { flex: 1; }
+.arrow-btn { background: none; border: none; font-size: 1.2em; cursor: pointer; padding: 0 6px; }
+.advanced-fields { margin-left: 18px; margin-top: 6px; width: 90%; display: flex; flex-direction: column; align-items: flex-start; }
+.advanced-fields .setting-item { width: 100%; display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px; }
+.advanced-fields label { min-width: 90px; text-align: left; margin-right: 10px; }
+.advanced-fields input[type="text"] { flex: 1; min-width: 0; margin-left: 18px; }
     </style>
 </head>
 <body>
@@ -444,6 +465,11 @@
             <div class="setting-item">
                 <label for="port">Port:</label>
                 <input type="number" id="home_port" />
+            </div>
+            <div class="button-container">
+                <button id="stopButton">Stop</button>
+                <button id="resetButton">Reset</button>
+                <button id="startButton">Start</button>
             </div>
         </div>
         <div id="settings" class="tabcontent">
@@ -524,13 +550,68 @@
                                 <label for="profileName">Profile Name:</label>
                                 <input type="text" id="profileName" required>
                             </div>
-                            <div class="setting-item">
-                                <label for="profileModel">Model:</label>
-                                <input type="text" id="profileModel" required>
-                            </div>
-                            <div class="setting-item">
-                                <label for="profileEmbedding">Embedding:</label>
-                                <input type="text" id="profileEmbedding">
+                            <!-- Collapsible model fields -->
+                            <div class="collapsible-model-group">
+                                <div class="collapsible-model">
+                                    <div class="main-model-row">
+                                        <label for="profileModelModel">Model:</label>
+                                        <input type="text" id="profileModelModel" class="main-model" placeholder="e.g. gpt-4.1" required>
+                                        <button type="button" class="arrow-btn" data-target="model-advanced-fields">&#9654;</button>
+                                    </div>
+                                    <div class="advanced-fields" id="model-advanced-fields" style="display:none;">
+                                        <div class="setting-item"><label for="profileModelApi">API:</label><input type="text" id="profileModelApi" placeholder="e.g. openai, groq, ollama, etc."></div>
+                                        <div class="setting-item"><label for="profileModelUrl">URL:</label><input type="text" id="profileModelUrl" placeholder="Custom API URL (optional)"></div>
+                                        <div class="setting-item"><label for="profileModelParams">Params (JSON):</label><input type="text" id="profileModelParams" placeholder='{"key": "value"}'></div>
+                                    </div>
+                                </div>
+                                <div class="collapsible-model">
+                                    <div class="main-model-row">
+                                        <label for="profileEmbeddingModel">Embedding:</label>
+                                        <input type="text" id="profileEmbeddingModel" class="main-model" placeholder="e.g. text-embedding-3-large">
+                                        <button type="button" class="arrow-btn" data-target="embedding-advanced-fields">&#9654;</button>
+                                    </div>
+                                    <div class="advanced-fields" id="embedding-advanced-fields" style="display:none;">
+                                        <div class="setting-item"><label for="profileEmbeddingApi">API:</label><input type="text" id="profileEmbeddingApi" placeholder="e.g. openai, groq, ollama, etc."></div>
+                                        <div class="setting-item"><label for="profileEmbeddingUrl">URL:</label><input type="text" id="profileEmbeddingUrl" placeholder="Custom API URL (optional)"></div>
+                                        <div class="setting-item"><label for="profileEmbeddingParams">Params (JSON):</label><input type="text" id="profileEmbeddingParams" placeholder='{"key": "value"}'></div>
+                                    </div>
+                                </div>
+                                <div class="collapsible-model">
+                                    <div class="main-model-row">
+                                        <label for="profileCodeModelModel">Code Model:</label>
+                                        <input type="text" id="profileCodeModelModel" class="main-model" placeholder="e.g. gpt-4-code, deepseek-coder, etc.">
+                                        <button type="button" class="arrow-btn" data-target="code-advanced-fields">&#9654;</button>
+                                    </div>
+                                    <div class="advanced-fields" id="code-advanced-fields" style="display:none;">
+                                        <div class="setting-item"><label for="profileCodeModelApi">API:</label><input type="text" id="profileCodeModelApi" placeholder="e.g. openai, groq, ollama, etc."></div>
+                                        <div class="setting-item"><label for="profileCodeModelUrl">URL:</label><input type="text" id="profileCodeModelUrl" placeholder="Custom API URL (optional)"></div>
+                                        <div class="setting-item"><label for="profileCodeModelParams">Params (JSON):</label><input type="text" id="profileCodeModelParams" placeholder='{"key": "value"}'></div>
+                                    </div>
+                                </div>
+                                <div class="collapsible-model">
+                                    <div class="main-model-row">
+                                        <label for="profileVisionModelModel">Vision Model:</label>
+                                        <input type="text" id="profileVisionModelModel" class="main-model" placeholder="e.g. gpt-4-vision, gemini-pro-vision, etc.">
+                                        <button type="button" class="arrow-btn" data-target="vision-advanced-fields">&#9654;</button>
+                                    </div>
+                                    <div class="advanced-fields" id="vision-advanced-fields" style="display:none;">
+                                        <div class="setting-item"><label for="profileVisionModelApi">API:</label><input type="text" id="profileVisionModelApi" placeholder="e.g. openai, groq, ollama, etc."></div>
+                                        <div class="setting-item"><label for="profileVisionModelUrl">URL:</label><input type="text" id="profileVisionModelUrl" placeholder="Custom API URL (optional)"></div>
+                                        <div class="setting-item"><label for="profileVisionModelParams">Params (JSON):</label><input type="text" id="profileVisionModelParams" placeholder='{"key": "value"}'></div>
+                                    </div>
+                                </div>
+                                <div class="collapsible-model">
+                                    <div class="main-model-row">
+                                        <label for="profileSpeakModelModel">Speak Model:</label>
+                                        <input type="text" id="profileSpeakModelModel" class="main-model" placeholder="e.g. openai-audio, pollinations, etc.">
+                                        <button type="button" class="arrow-btn" data-target="speak-advanced-fields">&#9654;</button>
+                                    </div>
+                                    <div class="advanced-fields" id="speak-advanced-fields" style="display:none;">
+                                        <div class="setting-item"><label for="profileSpeakModelApi">API:</label><input type="text" id="profileSpeakModelApi" placeholder="e.g. pollinations, openai, etc."></div>
+                                        <div class="setting-item"><label for="profileSpeakModelUrl">URL:</label><input type="text" id="profileSpeakModelUrl" placeholder="Custom API URL (optional)"></div>
+                                        <div class="setting-item"><label for="profileSpeakModelParams">Params (JSON):</label><input type="text" id="profileSpeakModelParams" placeholder='{"key": "value"}'></div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="button-container">
                                 <button type="button" id="saveProfile">Save</button>
@@ -733,11 +814,7 @@
                     </div>
                 </details>
 
-                <div class="button-container">
-                <button id="stopButton">Stop</button>
-                <button id="resetButton">Reset</button>
-                <button id="startButton">Start</button>
-            </div>
+                
 
                 <div id="status" class="status" style="display: none;"></div>
             </div>
@@ -751,6 +828,44 @@
     <script>
             // Get the element with id="homeButton" and click on it
             document.getElementById("homeButton").click();
+
+            // Synchronize Home and Settings fields
+            const homeFields = [
+                { home: 'home_minecraft_version', settings: 'minecraft_version' },
+                { home: 'home_host', settings: 'host' },
+                { home: 'home_port', settings: 'port' }
+            ];
+
+            homeFields.forEach(({ home, settings }) => {
+                const homeInput = document.getElementById(home);
+                const settingsInput = document.getElementById(settings);
+                if (!homeInput || !settingsInput) return;
+
+                // Update settings when home changes
+                homeInput.addEventListener('input', () => {
+                    settingsInput.value = homeInput.value;
+                });
+                // Update home when settings changes
+                settingsInput.addEventListener('input', () => {
+                    homeInput.value = settingsInput.value;
+                });
+            });
     </script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.arrow-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const target = document.getElementById(btn.dataset.target);
+            if (target.style.display === 'none') {
+                target.style.display = 'block';
+                btn.innerHTML = '&#9660;'; // Down arrow
+            } else {
+                target.style.display = 'none';
+                btn.innerHTML = '&#9654;'; // Right arrow
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>

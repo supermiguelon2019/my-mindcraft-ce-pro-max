@@ -6,6 +6,7 @@ import { app, BrowserWindow, ipcMain, Tray, Menu } from 'electron';
 import Store from 'electron-store';
 import { readFileSync, writeFileSync, existsSync, readdirSync, unlinkSync } from 'fs';
 import defaultSettings from '../settings.js';
+import { table } from 'node:console';
 
 // Set up paths FIRST
 const __filename = fileURLToPath(import.meta.url);
@@ -127,14 +128,37 @@ ipcMain.handle('get-available-profiles', () => {
     try {
         const rootDir = dirname(__dirname);
         const profilesDir = join(rootDir, 'profiles');
-        console.log('Looking for profiles in:', profilesDir);
-        
-        if (!existsSync(profilesDir)) {
+        console.log('Looking for profiles in:', profilesDir, 'and', rootDir);
+
+        let allProfiles = [];
+        // Get profiles in profiles/ recursively
+        if (existsSync(profilesDir)) {
+            allProfiles = getProfilesRecursively(profilesDir, rootDir);
+        } else {
             console.error('Profiles directory not found:', profilesDir);
-            return [];
         }
 
-        return getProfilesRecursively(profilesDir, rootDir);
+        // Also check all .json files in the base dir (rootDir)
+        const baseDirProfiles = [];
+        const baseItems = readdirSync(rootDir, { withFileTypes: true });
+        for (const item of baseItems) {
+            if (item.isFile() && item.name.endsWith('.json')) {
+                const fullPath = join(rootDir, item.name);
+                try {
+                    const content = readFileSync(fullPath, 'utf8');
+                    const profile = JSON.parse(content);
+                    if (profile.name && profile.model) {
+                        // Use relative path from rootDir
+                        baseDirProfiles.push('./' + item.name);
+                    }
+                } catch (err) {
+                    console.warn(`Skipping invalid base profile ${item.name}:`, err.message);
+                }
+            }
+        }
+
+        // Merge and sort
+        return [...allProfiles, ...baseDirProfiles].sort((a, b) => a.localeCompare(b));
     } catch (error) {
         console.error('Error reading profiles:', error);
         return [];

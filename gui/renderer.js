@@ -79,6 +79,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error(`Error setting value for ${key}:`, error);
                 }
             }
+            // Also set home_ fields if they exist for this key
+            const homeElement = document.getElementById('home_' + key);
+            if (homeElement) {
+                try {
+                    homeElement.value = value;
+                } catch (error) {
+                    console.error(`Error setting value for home_${key}:`, error);
+                }
+            }
         });
     }).catch(error => {
         console.error('Error loading settings:', error);
@@ -207,42 +216,89 @@ function openProfileEditor(profilePath = null) {
     const modal = document.getElementById('profileModal');
     const form = document.getElementById('profileForm');
     const title = document.getElementById('profileModalTitle');
-    
+
+    // Helper to set model section fields
+    function setModelSectionFields(prefix, data) {
+        document.getElementById(prefix + 'Api').value = data?.api || '';
+        document.getElementById(prefix + 'Model').value = data?.model || '';
+        document.getElementById(prefix + 'Url').value = data?.url || '';
+        document.getElementById(prefix + 'Params').value = data?.params ? JSON.stringify(data.params, null, 2) : '';
+    }
+
     if (profilePath) {
         title.textContent = 'Edit Profile';
         window.electronAPI.getProfileContent(profilePath).then(profile => {
             document.getElementById('profileName').value = profile.name || '';
-            document.getElementById('profileModel').value = profile.model || '';
-            document.getElementById('profileEmbedding').value = profile.embedding || '';
+            setModelSectionFields('profileModel', profile.model);
+            setModelSectionFields('profileCodeModel', profile.code_model);
+            setModelSectionFields('profileVisionModel', profile.vision_model);
+            setModelSectionFields('profileEmbedding', profile.embedding);
+            setModelSectionFields('profileSpeakModel', profile.speak_model);
             form.dataset.path = profilePath;
         });
     } else {
         title.textContent = 'New Profile';
         form.reset();
+        // Also clear all model section fields
+        ['profileModel','profileCodeModel','profileVisionModel','profileEmbedding','profileSpeakModel'].forEach(prefix => {
+            setModelSectionFields(prefix, {});
+        });
         delete form.dataset.path;
     }
-    
+
     modal.style.display = 'block';
 }
 
 function saveProfile() {
     const form = document.getElementById('profileForm');
+    // Helper to get model section fields as object or string
+    function getModelSectionFields(prefix) {
+        const model = document.getElementById(prefix + 'Model').value.trim();
+        const api = document.getElementById(prefix + 'Api')?.value.trim();
+        const url = document.getElementById(prefix + 'Url')?.value.trim();
+        const paramsRaw = document.getElementById(prefix + 'Params')?.value.trim();
+        let params = undefined;
+        if (paramsRaw) {
+            try {
+                params = JSON.parse(paramsRaw);
+            } catch (e) {
+                showStatus('Invalid JSON in ' + prefix + ' Params', 'error');
+                throw e;
+            }
+        }
+        // If only model is filled, return as string
+        if (model && !api && !url && !paramsRaw) return model;
+        // If nothing is filled, return undefined
+        if (!model && !api && !url && !paramsRaw) return undefined;
+        // Otherwise, build object with only non-empty fields
+        const obj = {};
+        if (api) obj.api = api;
+        if (model) obj.model = model;
+        if (url) obj.url = url;
+        if (params !== undefined) obj.params = params;
+        return Object.keys(obj).length > 0 ? obj : undefined;
+    }
     const profile = {
-        name: document.getElementById('profileName').value,
-        model: document.getElementById('profileModel').value,
-        embedding: document.getElementById('profileEmbedding').value
+        name: document.getElementById('profileName').value.trim()
     };
-    
+    const modelFields = [
+        ['model', 'profileModel'],
+        ['code_model', 'profileCodeModel'],
+        ['vision_model', 'profileVisionModel'],
+        ['embedding', 'profileEmbedding'],
+        ['speak_model', 'profileSpeakModel']
+    ];
+    for (const [key, prefix] of modelFields) {
+        const val = getModelSectionFields(prefix);
+        if (val !== undefined && val !== '') profile[key] = val;
+    }
     const path = form.dataset.path || `./profiles/${profile.name.replace(/\s+/g, '-').toLowerCase()}.json`;
-    
     window.electronAPI.saveProfile({ path, content: profile })
         .then(() => {
             document.getElementById('profileModal').style.display = 'none';
-            //window.location.reload(); // Refresh profile list
-            //only reload list, not the entire page
             window.electronAPI.getAvailableProfiles().then(profiles => {
                 const profileSelect = document.getElementById('profiles');
-                profileSelect.innerHTML = ''; // Clear existing options
+                profileSelect.innerHTML = '';
                 profiles.forEach(profile => {
                     const option = document.createElement('option');
                     option.value = profile;
