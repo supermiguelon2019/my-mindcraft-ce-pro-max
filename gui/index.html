@@ -3,9 +3,9 @@
 <head>
     <title>MindCraft-CE Settings</title>
     <style>        body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
-            background-color: #1e1e1e;
+            background: linear-gradient(135deg, #232526 0%, #414345 100%);
             color: #e0e0e0;
             overflow: hidden;
             height: 100vh;
@@ -14,19 +14,21 @@
 
         #titlebar {
             height: 32px;
-            background: #2b2b2b;
+            background: linear-gradient(90deg, #2b5876 0%, #4e4376 100%);
             -webkit-app-region: drag;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 8px;
             flex-shrink: 0;
+            border-bottom: 1px solid #333;
         }
 
         #title {
             color: #e0e0e0;
-            font-size: 12px;
-            margin-left: 8px;
+            font-size: 13px;
+            margin: auto auto auto 8px;
+            letter-spacing: 1px;
         }
 
         #window-controls {
@@ -35,201 +37,227 @@
         }
 
         .window-control {
-            width: 46px;
+            width: 40px;
+            min-width: 40px;
             height: 32px;
             background: transparent;
             border: none;
             color: #e0e0e0;
-            font-size: 12px;
+            font-size: 13px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.2s;
         }
 
         .window-control:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(0,180,216,0.15);
         }
 
         #close-button:hover {
             background: #e81123;
-        }        
+        }
         .container {
             flex: 1;
-            width: 90%; /* Reduced from 95% */
-            height: calc(100% - 150px); /* Account for titlebar */
-            margin: 10px auto; /* Already centered */
-            background-color: #2d2d2d;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            width: 92%;
+            height: calc(100% - 120px);
+            margin: 10px auto;
+            background: linear-gradient(120deg, #232526 0%, #3a3a3a 100%);
+            padding: 14px 18px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
             overflow-y: auto;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
             position: relative;
         }
         .container::-webkit-scrollbar {
-            display: none; /* Chrome, Safari and Opera */
+            display: none;
         }
         h1 {
             color: #00b4d8;
-            margin-bottom: 20px;
-        }        .setting-group {
-            margin-bottom: 10px;
-            border: 1px solid #404040;
-            border-radius: 4px;
-            background-color: #363636;
-            overflow: hidden;
+            margin-bottom: 18px;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
+        /* Settings grid - responsive grid with max 4 columns */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(320px, 1fr));
+            gap: 24px;
+            width: 100%;
+            margin: 0 auto;
+            align-items: start;
+        }
+        @media (max-width: 1600px) {
+            .settings-grid {
+                grid-template-columns: repeat(3, minmax(320px, 1fr));
+            }
+        }
+        @media (max-width: 1200px) {
+            .settings-grid {
+                grid-template-columns: repeat(2, minmax(320px, 1fr));
+            }
+        }
+        @media (max-width: 800px) {
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .setting-group {
+            display: block;
+            margin-bottom: 0;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(120deg, #363636 0%, #232526 100%); /* fallback */
+            box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+        /* Unique, meaningful gradients for each settings group */
+        .setting-group:nth-child(1)  { background: linear-gradient(120deg, #232526 0%, #00b4d8 100%); } /* Connection: blue */
+        .setting-group:nth-child(2)  { background: linear-gradient(120deg, #232526 0%, #43cea2 100%); } /* Mind Server: teal */
+        .setting-group:nth-child(3)  { background: linear-gradient(120deg, #232526 0%, #ffaf7b 100%); } /* Profile: orange */
+        .setting-group:nth-child(4)  { background: linear-gradient(120deg, #232526 0%, #a770ef 100%); } /* General: purple */
+        .setting-group:nth-child(5)  { background: linear-gradient(120deg, #232526 0%, #f7971e 100%); } /* Language & Display: yellow */
+        .setting-group:nth-child(6)  { background: linear-gradient(120deg, #232526 0%, #ff5858 100%); } /* Security: red */
+        .setting-group:nth-child(7)  { background: linear-gradient(120deg, #232526 0%, #43cea2 100%); } /* Performance: teal (alt) */
+        .setting-group:nth-child(8)  { background: linear-gradient(120deg, #232526 0%, #00c3ff 100%); } /* Chat: cyan */
+        .setting-group:nth-child(9)  { background: linear-gradient(120deg, #232526 0%, #f953c6 100%); } /* Logging: pink */
+        .setting-group:nth-child(10) { background: linear-gradient(120deg, #232526 0%, #f857a6 100%); } /* STT Audio: magenta */
+        .setting-group:nth-child(11) { background: linear-gradient(120deg, #232526 0%, #6a82fb 100%); } /* Speech: blue-violet */
+        .setting-group:nth-child(12) { background: linear-gradient(120deg, #232526 0%, #11998e 100%); } /* Autonomous/Idle: green */
         .setting-group summary {
-            padding: 15px;
-            background-color: #2b2b2b;
-            color: #90e0ef;
-            font-size: 1.2em;
-            font-weight: bold;
+            padding: 13px 18px;
+            background: rgba(0,0,0,0.18);
+            color: #fff;
+            font-size: 1.13em;
+            font-weight: 600;
             cursor: pointer;
             user-select: none;
-            transition: background-color 0.2s;
+            transition: background 0.2s;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
         }
         .setting-group summary:hover {
-            background-color: #323232;
-        }
-        .setting-group summary:focus {
-            outline: none;
-            background-color: #323232;
+            background: rgba(0,180,216,0.10);
         }
         .setting-group .settings-content {
-            padding: 15px;
+            padding: 14px 18px 10px 18px;
         }
         .setting-item {
-            margin-bottom: 15px;
-        }
-        .setting-group summary::marker,
-        .setting-group summary::-webkit-details-marker {
-            color: #90e0ef;
+            margin-bottom: 12px;
         }
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 4px;
+            font-weight: 500;
             color: #e0e0e0;
-        }        input[type="text"],
+            letter-spacing: 0.5px;
+        }
+        input[type="text"],
         input[type="number"],
         select {
             width: 100%;
-            padding: 8px;
+            padding: 7px 10px;
             border: 1px solid #404040;
-            border-radius: 4px;
+            border-radius: 6px;
             box-sizing: border-box;
-            background-color: #1e1e1e;
+            background: linear-gradient(90deg, #232526 0%, #414345 100%);
             color: #e0e0e0;
-        }
-        select[multiple] {
-            height: 200px;
-            padding: 5px;
-        }
-        select[multiple] option {
-            padding: 5px;
-            margin-bottom: 2px;
-            border-radius: 2px;
-        }
-        select[multiple] option:checked {
-            background-color: #00b4d8;
-            color: white;
-        }
-        select[multiple] option:hover {
-            background-color: #363636;
+            font-size: 1em;
+            transition: border 0.2s;
         }
         input[type="text"]:focus,
         input[type="number"]:focus,
         select:focus {
             outline: none;
             border-color: #00b4d8;
-            box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.2);
-        }
-        input::placeholder {
-            color: #666;
-            opacity: 1;
-        }
-        [title] {
-            position: relative;
-            cursor: help;
-        }
-        [title]:hover::after {
-            content: attr(title);
-            position: absolute;
-            bottom: 100%;
-            left: 0;
-            background: #00b4d8;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 14px;
-            white-space: nowrap;
-            z-index: 10;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 0 2px rgba(0,180,216,0.13);
         }
         input[type="checkbox"] {
             margin-right: 5px;
             accent-color: #00b4d8;
         }
         .button-container {
-            margin-top: 20px;
+            margin-top: 18px;
             text-align: center;
             display: flex;
             justify-content: center;
             gap: 10px;
-            position: sticky;
-            bottom: 50px;
-            background: #2d2d2d;
-            padding: 10px;
-            border-radius: 8px;
-            width: 380px;
-            margin-left: auto;
-            margin-right: auto;
+            background: none;
+            padding: 0;
+            border-radius: 0;
+            width: auto;
         }
         button {
-            padding: 10px 20px;
+            padding: 8px 18px;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 1em;
-            transition: all 0.3s ease;
-            min-width: 120px;
+            font-weight: 500;
+            transition: all 0.2s;
+            min-width: 110px;
+            background: linear-gradient(90deg, #00b4d8 0%, #43cea2 100%);
+            color: #fff;
+        }
+        button:hover {
+            background: linear-gradient(90deg, #43cea2 0%, #00b4d8 100%);
         }
         #startButton {
-            background-color: #2ecc71;
-            color: white;
+            background: linear-gradient(90deg, #2ecc71 0%, #43cea2 100%);
         }
         #startButton:hover {
-            background-color: #27ae60;
+            background: linear-gradient(90deg, #43cea2 0%, #2ecc71 100%);
         }
         #stopButton {
-            background-color: #e74c3c;
-            color: white;
+            background: linear-gradient(90deg, #e74c3c 0%, #ffaf7b 100%);
         }
         #stopButton:hover {
-            background-color: #c0392b;
+            background: linear-gradient(90deg, #ffaf7b 0%, #e74c3c 100%);
         }
         #resetButton {
-            background-color: #424242;
-            color: white;
+            background: linear-gradient(90deg, #424242 0%, #232526 100%);
+            margin-top: 20px;
         }
         #resetButton:hover {
-            background-color: #323232;
-        }        .status {
-            margin-top: 20px;
-            padding: 10px;
-            border-radius: 4px;
+            background: linear-gradient(90deg, #232526 0%, #424242 100%);
+        }
+        #addProfile, #deleteProfile, #editProfile {
+            background: linear-gradient(90deg, #00b4d8 0%, #43cea2 100%);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            min-width: 110px;
+            transition: background 0.2s;
+        }
+        #addProfile:hover, #deleteProfile:hover, #editProfile:hover {
+            background: linear-gradient(90deg, #43cea2 0%, #00b4d8 100%);
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+        .status {
+            margin-top: 18px;
+            padding: 8px;
+            border-radius: 6px;
             text-align: center;
         }
         .success {
-            background-color: rgba(0, 180, 216, 0.2);
+            background: linear-gradient(90deg, rgba(0,180,216,0.18) 0%, rgba(67,206,162,0.18) 100%);
             color: #90e0ef;
             border: 1px solid #00b4d8;
         }
         .error {
-            background-color: rgba(220, 53, 69, 0.2);
+            background: linear-gradient(90deg, rgba(220,53,69,0.18) 0%, rgba(255,175,123,0.18) 100%);
             color: #ff758f;
             border: 1px solid #dc3545;
         }
@@ -241,214 +269,156 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.4);
         }
-
         .modal-content {
-            background-color: #2d2d2d;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #404040;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 4px;
+            background: linear-gradient(120deg, #232526 0%, #363636 100%);
+            margin: 8% auto;
+            padding: 18px 24px;
+            border: none;
+            width: 90%;
+            max-width: 480px;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.18);
         }
-
         .close {
             color: #aaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.2s;
         }
-
         .close:hover {
             color: #e0e0e0;
+            background: rgba(0,180,216,0.10);
         }
-
-        #addProfile, #deleteProfile {
-            background-color: #00b4d8; /* azul */
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1em;
-            min-width: 120px;
-            transition: background-color 0.3s ease;
+        /* Collapsible model fields */
+        .collapsible-model-group { display: flex; flex-direction: column; gap: 10px; }
+        .collapsible-model { display: flex; flex-direction: column; align-items: stretch; gap: 2px; }
+        .collapsible-model label { min-width: 110px; margin-bottom: 2px; }
+        .main-model-row { display: flex; align-items: center; width: 100%; gap: 8px; }
+        .collapsible-model .main-model { flex: 1; }
+        .arrow-btn { background: none; border: none; font-size: 1.2em; cursor: pointer; padding: 0 6px; color: #00b4d8; }
+        .arrow-btn:hover { color: #43cea2; }
+        .advanced-fields { margin-left: 18px; margin-top: 6px; width: 90%; display: flex; flex-direction: column; align-items: flex-start; }
+        .advanced-fields .setting-item { width: 100%; display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px; }
+        .advanced-fields label { min-width: 90px; text-align: left; margin-right: 10px; }
+        .advanced-fields input[type="text"] { flex: 1; min-width: 0; margin-left: 18px; }
+        #icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 6px;
+            vertical-align: middle;
         }
-
-        #addProfile:hover, #deleteProfile:hover {
-            background-color: #009bb3; /* azul más oscuro */
-        }
-
-        .button-group {
-            display: flex;
-            gap: 10px; /* espacio entre botones */
-            justify-content: center; /* o center, o space-between según quieras */
-            align-items: center;
-        }
-        /* Style the tab */
+        /* Tab bar */
         .tab {
-        overflow: hidden;
-        border: 1px solid #ccc;
-        background-color: #f1f1f1;
-        }
-
-        /* Style the buttons that are used to open the tab content */
-        .tab button {
-        background-color: inherit;
-        float: left;
-        border: none;
-        outline: none;
-        cursor: pointer;
-        padding: 6px 16px;
-        transition: 0.3s;
-        }
-
-        /* Change background color of buttons on hover */
-        .tab button:hover {
-        background-color: #ddd;
-        }
-
-        /* Create an active/current tablink class */
-        .tab button.active {
-        background-color: #ccc;
-        }
-
-        /* Style the tab content */
-        .tabcontent {
-        display: none;
-        padding: 6px 12px;
-        border-top: none;
-        }
-
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden; /* Prevents scrolling */
-        }
-
-        #titlebar {
-            height: 40px;
-            background-color: #333;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 10px;
-        }
-
-        .tabcontent {
-            display: none;
-            height: calc(100vh - 30px); /* Ajusta según el tamaño de #titlebar y pestañas */
-            overflow-y: hidden;
-            padding: 16px;
-        }
-
-        #docs {
-            flex: 1;
-            width: 100%; /* Reduced from 95% */
-            height: calc(100% - 120px); /* Account for titlebar */
-
-            background-color: #0d1117;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding-left: 20px;
-            padding-right: 20px;
-            padding-top: 20px;
-            padding-bottom: 20px; /* Padding interno para que el texto no esté pegado a los bordes */
-            overflow-y: auto;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE and Edge */
-            position: relative;
-        }
-        #docs::-webkit-scrollbar {
-            display: none; /* Chrome, Safari and Opera */
-        }
-        zero-md {
-            width: calc(100% - 40px); /* Ajusta el ancho para que no se salga del contenedor */
-            max-width: 100%;
-            box-sizing: border-box;
-            padding: 0 16px; /* Padding interno para que el texto no esté pegado a los bordes */
-        }
-        .tab {
-            background-color: #444;
-            padding: 5px;
+            background: none;
+            padding: 5px 0 5px 50px;
             display: flex;
             gap: 5px;
+            border-bottom: 1px solid #333;
         }
-
-        #settings-container {
-            overflow-y: hidden;
+        .tab button {
+            -webkit-app-region: no-drag;
+            background: none;
+            border: none;
+            /** outline: 1px solid greenyellow; **/
+            cursor: pointer;
+            padding: 7px 22px;
+            margin: 0 2px;
+            font-size: 1em;
+            color: #e0e0e0;
+            border-radius: 8px;
+            transition: background 0.2s, color 0.2s;
         }
-
-        /* Hide scrollbar but allow scrolling in profile modal */
-        #profileModal {
-            overflow-y: auto;
-            max-height: 90vh;
+        .tab button:hover {
+            background: linear-gradient(90deg, #43cea2 0%, #00b4d8 100%);
+            color: #fff;
         }
-        #profileModal::-webkit-scrollbar {
+        .tab button.active {
+            background: linear-gradient(90deg, #00b4d8 0%, #43cea2 100%);
+            color: #fff;
+        }
+        .tabcontent {
             display: none;
+            height: calc(100vh - 50px);
+            overflow-y: auto;
+            padding: 18px 0 0 0;
         }
-        #profileModal {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;     /* Firefox */
+        #home .setting-item, #home .button-container {
+            max-width: 420px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .collapsible-model-group { display: flex; flex-direction: column; gap: 10px; }
-.collapsible-model { display: flex; flex-direction: column; align-items: stretch; gap: 2px; }
-.collapsible-model label { min-width: 110px; margin-bottom: 2px; }
-.main-model-row { display: flex; align-items: center; width: 100%; gap: 8px; }
-.collapsible-model .main-model { flex: 1; }
-.arrow-btn { background: none; border: none; font-size: 1.2em; cursor: pointer; padding: 0 6px; }
-.advanced-fields { margin-left: 18px; margin-top: 6px; width: 90%; display: flex; flex-direction: column; align-items: flex-start; }
-.advanced-fields .setting-item { width: 100%; display: flex; align-items: center; justify-content: flex-start; margin-bottom: 4px; }
-.advanced-fields label { min-width: 90px; text-align: left; margin-right: 10px; }
-.advanced-fields input[type="text"] { flex: 1; min-width: 0; margin-left: 18px; }
+        #home h1 {
+            margin-top: 18px;
+        }
+        /* Settings grid container */
+        #settings .container {
+            height: calc(100% - 50px);
+            background: none;
+            box-shadow: none;
+            padding: 0;
+        }
+        #settings .settings-grid {
+            margin-top: 0;
+        }
+        #docs {
+            padding: 20px;
+            background-color: #0d1117;
+        }
     </style>
 </head>
 <body>
     <div id="titlebar">
-        <div id="title">MindCraft-CE</div>
+        <div style="display: flex;">
+            <div style="margin: auto;">
+                <img src="icon.ico" alt="icon" id="icon" />
+            </div>
+            <div id="title">MindCraft-CE</div>
+                <div class="tab">
+
+                <script>
+                    function openMenu(evt, menuName) { 
+                        // Declare all variables
+                        var i, tabcontent, tablinks;
+
+                        // Get all elements with class="tabcontent" and hide them
+                        tabcontent = document.getElementsByClassName("tabcontent");
+                        for (i = 0; i < tabcontent.length; i++) {
+                            tabcontent[i].style.display = "none";
+                        }
+
+                        // Get all elements with class="tablinks" and remove the class "active"
+                        tablinks = document.getElementsByClassName("tablinks");
+                        for (i = 0; i < tablinks.length; i++) {
+                            tablinks[i].className = tablinks[i].className.replace(" active", "");
+                        }
+
+                        // Show the current tab, and add an "active" class to the button that opened the tab
+                        document.getElementById(menuName).style.display = "block"; 
+                        evt.currentTarget.className += " active";
+                    }
+                </script>
+
+                <button class="tablinks" onclick="openMenu(event, 'home')" id="homeButton">Home</button>
+                <button class="tablinks" onclick="openMenu(event, 'settings')" id="settingsButton">Settings</button>
+                <button class="tablinks" onclick="openMenu(event, 'docs')" id="docsButton">Docs</button>
+                <button class="tablinks" onclick="openMenu(event, 'console')" id="consoleButton">Console</button>
+
+
+            </div>
+        </div>
+        
         <div id="window-controls">
             <button class="window-control" id="minimize-button">─</button>
             <button class="window-control" id="maximize-button">□</button>
             <button class="window-control" id="close-button">✕</button>
         </div>
     </div>
-    <div class="tab">
-
-        <script>
-            function openMenu(evt, menuName) { 
-                // Declare all variables
-                var i, tabcontent, tablinks;
-
-                // Get all elements with class="tabcontent" and hide them
-                tabcontent = document.getElementsByClassName("tabcontent");
-                for (i = 0; i < tabcontent.length; i++) {
-                    tabcontent[i].style.display = "none";
-                }
-
-                // Get all elements with class="tablinks" and remove the class "active"
-                tablinks = document.getElementsByClassName("tablinks");
-                for (i = 0; i < tablinks.length; i++) {
-                    tablinks[i].className = tablinks[i].className.replace(" active", "");
-                }
-
-                // Show the current tab, and add an "active" class to the button that opened the tab
-                document.getElementById(menuName).style.display = "block"; 
-                evt.currentTarget.className += " active";
-            }
-        </script>
-
-        <button class="tablinks" onclick="openMenu(event, 'home')" id="homeButton">Home</button>
-        <button class="tablinks" onclick="openMenu(event, 'settings')" id="settingsButton">Settings</button>
-        <button class="tablinks" onclick="openMenu(event, 'docs')" id="docsButton">Docs</button>
-
-
-    </div>
+    
     <div id="content-area">
         <div id="home" class="tabcontent">
             <div style="text-align: center;">
@@ -468,12 +438,12 @@
             </div>
             <div class="button-container">
                 <button id="stopButton">Stop</button>
-                <button id="resetButton">Reset</button>
                 <button id="startButton">Start</button>
             </div>
         </div>
         <div id="settings" class="tabcontent">
             <div class="container" >
+                <div class="settings-grid">
                 <details class="setting-group" open>
                     <summary>Connection Settings</summary>
                     <div class="settings-content">
@@ -535,6 +505,7 @@
                 <div class="setting-item">
                     <div class="button-group">
                         <button id="addProfile">Add Profile</button>
+                        <button id="editProfile">Edit Profile</button>
                         <button id="deleteProfile">Delete Profile</button>
                     </div>
 
@@ -811,18 +782,42 @@
                             <label for="log_vision_data" title="Log only vision inputs/outputs">Log Vision Data:</label>
                             <input type="checkbox" id="log_vision_data" />
                         </div>
+                        <div class="setting-item">
+                            <label for="external_logging">Enable External Logging:</label>
+                            <input type="checkbox" id="external_logging" />
+                        </div>
                     </div>
                 </details>
 
-                
-
+                <details class="setting-group">
+                    <summary>Autonomous/Idle Settings</summary>
+                    <div class="settings-content">
+                        <div class="setting-item">
+                            <label for="auto_idle_trigger_enabled">Enable Auto Idle:</label>
+                            <input type="checkbox" id="auto_idle_trigger_enabled" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="auto_idle_trigger_timeout_secs">Idle Timeout (secs):</label>
+                            <input type="number" id="auto_idle_trigger_timeout_secs" />
+                        </div>
+                        <div class="setting-item">
+                            <label for="auto_idle_trigger_message">Idle Message:</label>
+                            <input type="text" id="auto_idle_trigger_message" />
+                        </div>
+                    </div>
+                </details>
                 <div id="status" class="status" style="display: none;"></div>
             </div>
+            <button id="resetButton" style="background-color:#424242;color:white;margin-bottom:30px;display:block;margin-left:auto;margin-right:auto;">Reset</button>
         </div>
     </div>
 
     <div id="docs" class="tabcontent">
         <zero-md></zero-md>
+    </div>
+    <div id="console" class="tabcontent" style="display:none;position:absolute;left:0;top:32px;right:0;bottom:0;width:100vw;height:calc(100vh - 32px);padding:0;margin:0;background:transparent;z-index:2;">
+        <h2 style="color:#00b4d8;margin:24px 0 8px 0;text-align:center;font-size:1.5em;">Console</h2>
+        <div id="consoleOutput" style="position:absolute;left:24px;right:24px;top:64px;bottom:24px;background:#181c20;border-radius:8px;padding:18px;overflow-y:auto;font-family:monospace;font-size:1.1em;color:#90e0ef;box-shadow:0 1px 4px rgba(0,0,0,0.10);"></div>
     </div>
     <script type="module" src="renderer.js"></script>
     <script>
@@ -866,6 +861,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+</script>
+<script>
+// Console tab logic
+const consoleForm = document.getElementById('consoleForm');
+const consoleInput = document.getElementById('consoleInput');
+const consoleOutput = document.getElementById('consoleOutput');
+if (consoleForm && consoleInput && consoleOutput) {
+    consoleForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const cmd = consoleInput.value.trim();
+        if (!cmd) return;
+        // For now, just echo the command. You can hook this to backend logic.
+        const out = document.createElement('div');
+        out.textContent = '> ' + cmd;
+        out.style.color = '#fff';
+        consoleOutput.appendChild(out);
+        consoleInput.value = '';
+        consoleOutput.scrollTop = consoleOutput.scrollHeight;
+    });
+}
 </script>
 </body>
 </html>

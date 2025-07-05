@@ -58,12 +58,14 @@ ipcMain.on('close-window', () => {
     app.quit();
 });
 
-async function createWindow() {    mainWindow = new BrowserWindow({
+async function createWindow() {
+    mainWindow = new BrowserWindow({
         width: 800,
         height: 800,
         center: true,  // Add this to center window
         frame: false,
         resizable: true,
+        icon: join(__dirname, 'icon.ico'), // Set app icon
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: true,
@@ -71,11 +73,9 @@ async function createWindow() {    mainWindow = new BrowserWindow({
             preload: join(__dirname, 'preload.cjs')
         }
     });
-    
     mainWindow.on('closed', () => {
         mainWindow = null;
     });
-    
     await mainWindow.loadFile(join(__dirname, 'index.html'));
 }
 
@@ -204,21 +204,15 @@ ipcMain.handle('save-settings', (event, newSettings) => {
         // Filter out UI-specific properties and only keep known settings
         const validSettings = {};
         const knownSettings = [
-            'minecraft_version', 'host', 'port', 'auth',
-            'host_mindserver', 'mindserver_host', 'mindserver_port',
-            'base_profile', 'profiles', 'plugins', 'load_memory',
-            'init_message', 'only_chat_with', 'language',
-            'show_bot_views', 'allow_insecure_coding', 'allow_vision',
-            'vision_mode', 'blocked_actions', 'code_timeout_mins',
-            'relevant_docs_count', 'max_messages', 'num_examples',
-            'max_commands', 'verbose_commands', 'narrate_behavior',
-            'chat_bot_messages', 'speak', 'stt_transcription',
-            'stt_provider', 'stt_username', 'stt_agent_name',
-            'stt_rms_threshold', 'stt_silence_duration',
-            'stt_min_audio_duration', 'stt_max_audio_duration',
-            'stt_debug_audio', 'stt_cooldown_ms',
-            'stt_speech_threshold_ratio', 'stt_consecutive_speech_samples',
-            'log_normal_data', 'log_reasoning_data', 'log_vision_data'
+            "minecraft_version","host","port","auth","host_mindserver","mindserver_host","mindserver_port",
+            "base_profile","profiles","plugins","load_memory","init_message","only_chat_with","language",
+            "show_bot_views","allow_insecure_coding","allow_vision","vision_mode","blocked_actions",
+            "code_timeout_mins","relevant_docs_count","max_messages","num_examples","max_commands",
+            "verbose_commands","narrate_behavior","chat_bot_messages","auto_idle_trigger","speak",
+            "stt_transcription","stt_provider","stt_username","stt_agent_name","stt_rms_threshold",
+            "stt_silence_duration","stt_min_audio_duration","stt_max_audio_duration","stt_debug_audio",
+            "stt_cooldown_ms","stt_speech_threshold_ratio","stt_consecutive_speech_samples","log_normal_data",
+            "log_reasoning_data","log_vision_data","external_logging"
         ];
 
         // Only copy known settings properties
@@ -249,12 +243,25 @@ ipcMain.handle('start-main', async () => {
         
         const { fork } = await import('child_process');
         mainProcess = fork(mainPath, [], {
-            stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
+            stdio: ['pipe', 'pipe', 'pipe', 'ipc'], // Use pipes for stdout/stderr
             env: {
                 ...process.env,
                 NODE_OPTIONS: '--experimental-modules --es-module-specifier-resolution=node'
             }
         });
+
+        // Forward stdout to renderer
+        if (mainProcess.stdout) {
+            mainProcess.stdout.on('data', (data) => {
+                mainWindow.webContents.send('console-output', data.toString());
+            });
+        }
+        // Forward stderr to renderer
+        if (mainProcess.stderr) {
+            mainProcess.stderr.on('data', (data) => {
+                mainWindow.webContents.send('console-output', data.toString());
+            });
+        }
         
         return new Promise((resolve, reject) => {
             let startupTimeout;

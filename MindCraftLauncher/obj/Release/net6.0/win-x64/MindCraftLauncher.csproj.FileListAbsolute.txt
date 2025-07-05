@@ -1,0 +1,15 @@
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\bin\Release\net6.0\win-x64\MindCraftLauncher.exe
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\bin\Release\net6.0\win-x64\MindCraftLauncher.deps.json
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\bin\Release\net6.0\win-x64\MindCraftLauncher.runtimeconfig.json
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\bin\Release\net6.0\win-x64\MindCraftLauncher.dll
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\bin\Release\net6.0\win-x64\MindCraftLauncher.pdb
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\obj\Release\net6.0\win-x64\MindCraftLauncher.GeneratedMSBuildEditorConfig.editorconfig
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\obj\Release\net6.0\win-x64\MindCraftLauncher.AssemblyInfoInputs.cache
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\obj\Release\net6.0\win-x64\MindCraftLauncher.AssemblyInfo.cs
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\obj\Release\net6.0\win-x64\MindCraftLauncher.csproj.CoreCompileInputs.cache
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\obj\Release\net6.0\win-x64\MindCraftLauncher.sourcelink.json
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\obj\Release\net6.0\win-x64\MindCraftLauncher.dll
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\obj\Release\net6.0\win-x64\refint\MindCraftLauncher.dll
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\obj\Release\net6.0\win-x64\MindCraftLauncher.pdb
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\obj\Release\net6.0\win-x64\MindCraftLauncher.genruntimeconfig.cache
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\obj\Release\net6.0\win-x64\ref\MindCraftLauncher.dll

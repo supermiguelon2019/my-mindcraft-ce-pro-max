@@ -66,5 +66,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     onMainExit: (callback) => ipcRenderer.on('main-exit', (_, code) => {
         console.log('Main process exited with code:', code);
         callback(_, code);
-    })
+    }),
+    onConsoleOutput: (callback) => ipcRenderer.on('console-output', (_, data) => callback(data)),
 });

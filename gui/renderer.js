@@ -58,6 +58,16 @@ document.addEventListener('DOMContentLoaded', () => {
     window.electronAPI.getSettings().then(settings => {
         console.log('Received settings:', settings);
         Object.entries(settings).forEach(([key, value]) => {
+            // Handle auto_idle_trigger as a nested object
+            if (key === 'auto_idle_trigger' && typeof value === 'object' && value !== null) {
+                const enabled = document.getElementById('auto_idle_trigger_enabled');
+                const timeout = document.getElementById('auto_idle_trigger_timeout_secs');
+                const message = document.getElementById('auto_idle_trigger_message');
+                if (enabled) enabled.checked = !!value.enabled;
+                if (timeout) timeout.value = value.timeout_secs ?? '';
+                if (message) message.value = value.message ?? '';
+                return;
+            }
             const element = document.getElementById(key);
             if (element) {
                 try {
@@ -96,8 +106,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to collect current settings
     const collectSettings = () => {
         const settings = {};
+        // Handle auto_idle_trigger as a nested object
+        const idleEnabled = document.getElementById('auto_idle_trigger_enabled');
+        const idleTimeout = document.getElementById('auto_idle_trigger_timeout_secs');
+        const idleMessage = document.getElementById('auto_idle_trigger_message');
+        if (idleEnabled || idleTimeout || idleMessage) {
+            settings.auto_idle_trigger = {
+                enabled: idleEnabled ? idleEnabled.checked : false,
+                timeout_secs: idleTimeout && idleTimeout.value !== '' ? Number(idleTimeout.value) : 0,
+                message: idleMessage ? idleMessage.value : ''
+            };
+        }
         document.querySelectorAll('[id]').forEach(element => {
-            if (element.id && !['titlebar', 'title', 'window-controls', 'status', 'startButton', 'stopButton', 'resetButton'].includes(element.id)) {
+            if (element.id && !['titlebar', 'title', 'window-controls', 'status', 'startButton', 'stopButton', 'resetButton',
+                'auto_idle_trigger_enabled', 'auto_idle_trigger_timeout_secs', 'auto_idle_trigger_message'].includes(element.id)) {
                 if (element.type === 'checkbox') {
                     settings[element.id] = element.checked;
                 } else if (element.multiple) {
@@ -343,6 +365,14 @@ function deleteProfile() {
 // Add event listeners for profile management
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('addProfile').addEventListener('click', () => openProfileEditor());
+    document.getElementById('editProfile').addEventListener('click', () => {
+        const select = document.getElementById('profiles');
+        if (select && select.value) {
+            openProfileEditor(select.value);
+        } else {
+            showStatus('Select a profile to edit.', 'error');
+        }
+    });
     document.getElementById('saveProfile').addEventListener('click', saveProfile);
     document.getElementById('deleteProfile').addEventListener('click', deleteProfile);
     document.querySelector('.close').addEventListener('click', () => {
@@ -350,4 +380,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     const mdViewer = document.querySelector('zero-md');
     mdViewer.src = "../README.md";
+});
+
+// Real-time console output
+window.electronAPI.onConsoleOutput((data) => {
+    const consoleOutput = document.getElementById('consoleOutput');
+    if (consoleOutput) {
+        const out = document.createElement('div');
+        out.textContent = data;
+        out.style.color = '#b0ffb0';
+        out.style.whiteSpace = 'pre-wrap';
+        consoleOutput.appendChild(out);
+        consoleOutput.scrollTop = consoleOutput.scrollHeight;
+    }
 });

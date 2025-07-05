@@ -1,0 +1,2 @@
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\bin\Release\net6.0-windows\win-x64\publish\MindCraftLauncher.pdb
+D:\super\Documents\VScode\MindCraft-ce\my-mindcraft-ce-pro-max\gui\MindCraftLauncher\bin\Release\net6.0-windows\win-x64\publish\MindCraftLauncher.exe

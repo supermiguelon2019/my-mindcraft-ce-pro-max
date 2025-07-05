@@ -100,7 +100,7 @@
 
 5. Start a minecraft world and open it to LAN on localhost port `55916`
 
-6. Run `node main.js` from the installed directory or the run.bat/sh file
+6. Run `node main.js` from the installed directory or the run.vbs/sh file
 
 If you encounter issues, check the [FAQ](/FAQ.md) or find support on [discord](https://discord.gg/DNnBQvCtwr). If that fails, you can [create an issue](https://github.com/mindcraft-ce/mindcraft-ce/issues/new).
 
