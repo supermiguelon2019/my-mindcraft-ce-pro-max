@@ -10,7 +10,7 @@ const settings = {
     "mindserver_port": 8080,
     
     // the base profile is shared by all bots for default prompts/examples/modes
-    "base_profile": "./profiles/defaults/survival.json", // also see creative.json, god_mode.json, and personality.json is really fun.
+    "base_profile": "./profiles/defaults/_default.json", // also see creative.json, god_mode.json, and personality.json is really fun.
     "profiles": [
         "./andy.json",
         // "./profiles/gpt.json",
@@ -21,6 +21,7 @@ const settings = {
         // "./profiles/grok.json",
         // "./profiles/mistral.json",
         // "./profiles/deepseek.json",
+        // "./profiles/vertex.json",
         // "./profiles/andy-4.json",
 
         // using more than 1 profile requires you to /msg each bot indivually
@@ -36,7 +37,7 @@ const settings = {
 
     "allow_insecure_coding": false, // allows newAction command and model can write/run code on your computer. enable at own risk
     "allow_vision": false, // allows vision model to interpret screenshots as inputs
-    "vision_mode": "off", // "off", "prompted", or "always"
+    "vision_mode": "prompted", // "off", "prompted", or "always"
     "blocked_actions" : ["!checkBlueprint", "!checkBlueprintLevel", "!getBlueprint", "!getBlueprintLevel"] , // commands to disable and remove from docs. Ex: ["!setMode"]
     "code_timeout_mins": -1, // minutes code is allowed to run. -1 for no timeout
     "relevant_docs_count": 5, // number of relevant code function docs to select for prompting. -1 for all
@@ -51,8 +52,8 @@ const settings = {
     // Allows for truly autonomous playing
     "auto_idle_trigger": {
       "enabled": false,
-      "timeout_secs": 10, // 10 seconds inactivity before prompting
-      "message": "do something!"
+      "timeout_secs": 120, // 10 seconds inactivity before prompting
+      "message": "Keep doing stuff!"
     },
 
     "speak": true,

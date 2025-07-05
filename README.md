@@ -114,6 +114,7 @@ You can configure the agent's name, model, and prompts in their profile like `an
 |------|------|------|------|
 | `openai` | `OPENAI_API_KEY` | `gpt-4.1-mini` | [docs](https://platform.openai.com/docs/models) |
 | `google` | `GEMINI_API_KEY` | `gemini-2.0-flash` | [docs](https://ai.google.dev/gemini-api/docs/models/gemini) |
+| `vertex` | `GCLOUD AUTHENTICATION` | `vertex/gemini-2.0-flash` | [models](https://console.cloud.google.com/vertex-ai/model-garden) [docs](src/models/vertex_ai.md) |
 | `anthropic` | `ANTHROPIC_API_KEY` | `claude-3-5-haiku-20241022` | [docs](https://docs.anthropic.com/claude/docs/models-overview) |
 | `xai` | `XAI_API_KEY` | `grok-3-mini` | [docs](https://docs.x.ai/docs) |
 | `deepseek` | `DEEPSEEK_API_KEY` | `deepseek-chat` | [docs](https://api-docs.deepseek.com/) |
@@ -130,6 +131,7 @@ You can configure the agent's name, model, and prompts in their profile like `an
 | `pollinations` | n/a | `pollinations/openai-large` | [docs](https://github.com/pollinations/pollinations/blob/master/APIDOCS.md) |
 | `vllm` | n/a | `vllm/llama3` | [docs](https://docs.vllm.ai/en/latest/) |
 | `ollama` (local) | n/a | `ollama/sweaterdog/andy-4` | [docs](https://ollama.com/library) |
+| `andy API` | `ANDY_API_KEY` (optional) | `andy/sweaterdog/andy-4` | [docs](https://github.com/pollinations/pollinations/blob/master/APIDOCS.md) |
 
 If you use Ollama, to install the models used by default (generation and embedding), execute the following terminal command:
 `ollama pull sweaterdog/andy-4 && ollama pull nomic-embed-text`
@@ -207,7 +209,7 @@ All apis have default models and urls, so those fields are optional. The `params
 
 Embedding models are used to embed and efficiently select relevant examples for conversation and coding.
 
-Supported Embedding APIs: `openai`, `google`, `replicate`, `huggingface`, `novita`, `ollama`
+Supported Embedding APIs: `openai`, `google`, `replicate`, `huggingface`, `novita`, `ollama`, `andy`
 
 If you try to use an unsupported model, then it will default to a simple word-overlap method. Expect reduced performance, recommend mixing APIs to ensure embedding support.
 
