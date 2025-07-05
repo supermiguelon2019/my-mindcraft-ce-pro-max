@@ -129,9 +129,8 @@ You can configure the agent's name, model, and prompts in their profile like `an
 | `glhf.chat` | `GHLF_API_KEY` | `glhf/hf:meta-llama/Llama-3.1-405B-Instruct` | [docs](https://glhf.chat/user-settings/api) |
 | `hyperbolic` | `HYPERBOLIC_API_KEY` | `hyperbolic/deepseek-ai/DeepSeek-V3` | [docs](https://docs.hyperbolic.xyz/docs/getting-started) |
 | `pollinations` | n/a | `pollinations/openai-large` | [docs](https://github.com/pollinations/pollinations/blob/master/APIDOCS.md) |
-| `vllm` | n/a | `vllm/llama3` | [docs](https://docs.vllm.ai/en/latest/) |
-| `ollama` (local) | n/a | `ollama/sweaterdog/andy-4` | [docs](https://ollama.com/library) |
 | `andy API` | `ANDY_API_KEY` (optional) | `andy/sweaterdog/andy-4` | [docs](https://github.com/pollinations/pollinations/blob/master/APIDOCS.md) |
+| `vllm` | n/a | `vllm/llama3` | n/a |
 
 If you use Ollama, to install the models used by default (generation and embedding), execute the following terminal command:
 `ollama pull sweaterdog/andy-4 && ollama pull nomic-embed-text`
