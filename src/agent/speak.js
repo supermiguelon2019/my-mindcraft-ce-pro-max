@@ -66,13 +66,13 @@ $s.Speak('${txt.replace(/'/g,"''")}'); $s.Dispose()"`
           Start-Sleep -Seconds [math]::Ceiling($p.NaturalDuration.TimeSpan.TotalSeconds);
         `;
         const psProcess = spawn('powershell', ['-NoProfile','-Command', ps], {
-          stdio: 'ignore', detached: true
+          stdio: 'ignore', detached: true, windowsHide: true
         });
         psProcess.on('exit', processQueue);
 
       } else {
         const player = spawn('ffplay', ['-nodisp','-autoexit','pipe:0'], {
-          stdio: ['pipe','ignore','ignore']
+          stdio: ['pipe','ignore','ignore'], windowsHide: true
         });
         player.stdin.write(Buffer.from(audioData, 'base64'));
         player.stdin.end();

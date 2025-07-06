@@ -20,7 +20,7 @@ class Program
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Error al iniciar: {ex.Message}");
+            Console.Error.WriteLine($"error starting: {ex.Message}");
         }
     }
 
@@ -45,7 +45,7 @@ class Program
 
         if (proc.ExitCode != 0)
         {
-            throw new Exception($"Error al ejecutar '{command}': {error}");
+            throw new Exception($"error executing '{command}': {error}");
         }
     }
 
@@ -65,7 +65,7 @@ class Program
 
         if (proc.ExitCode != 0)
         {
-            throw new Exception($"Error al ejecutar '{command}'");
+            throw new Exception($"error executing '{command}'");
         }
     }
 }

@@ -238,15 +238,16 @@ ipcMain.handle('save-settings', (event, newSettings) => {
 // Start main process
 ipcMain.handle('start-main', async () => {      
     try {
-        const mainPath = join(__dirname, 'main-wrapper.js');
+        const mainPath = join(__dirname, '../main.js');
         console.log('Starting wrapped main process:', mainPath);
         
         const { fork } = await import('child_process');
         mainProcess = fork(mainPath, [], {
             stdio: ['pipe', 'pipe', 'pipe', 'ipc'], // Use pipes for stdout/stderr
+            windowsHide: true, // Hide console window on Windows
+            detached: false,
             env: {
                 ...process.env,
-                NODE_OPTIONS: '--experimental-modules --es-module-specifier-resolution=node'
             }
         });
 

@@ -22,6 +22,7 @@ export class AgentProcess {
         const agentProcess = spawn('node', args, {
             stdio: 'inherit',
             stderr: 'inherit',
+            windowsHide: true,
         });
         
         let last_restart = Date.now();
