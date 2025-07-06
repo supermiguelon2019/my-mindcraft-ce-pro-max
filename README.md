@@ -52,7 +52,6 @@
 | **Dependencies** | Older | **Updated** (e.g., Mineflayer 4.29.0) |
 | **Error Handling** | Shows technical error message, difficult to troubleshoot | **Includes suggested fix** for easy fixing |
 | **Pathfinding** | Basic, standard robotic movement. | **Upgraded movements**, ability to use doors, fence gates, and swim better.|
-| **GUI** | Only mineserver | **Includes a GUI for changing settings and running the bot** |
 
 > [!Caution]
 > Do not connect this bot to public servers with coding enabled. This project allows an LLM to write/execute code on your computer. The code is sandboxed, but still vulnerable to injection attacks. Code writing is disabled by default. You can enable it by setting <code>allow_insecure_coding</code> to <code>true</code> in <code>settings.js</code>. Ye be warned.
@@ -96,11 +95,11 @@
 
 3. Rename `keys.example.json` to `keys.json` and fill in your API keys (you only need one). The desired model is set in `andy.json` or other profiles. For other models refer to the table below.
 
-4. In terminal/command prompt, run `npm install` from the installed directory or install.bat/sh file. (Note: If `naudiodon` fails to build and you don't need STT, you can usually proceed.)
+4. In terminal/command prompt, run `npm install` from the installed directory or install.sh/MindCraftLauncher.exe file. (Note: If `naudiodon` fails to build and you don't need STT, you can usually proceed.)
 
 5. Start a minecraft world and open it to LAN on localhost port `55916`
 
-6. Run `node main.js` from the installed directory or the run.vbs/sh file
+6. Run `node main.js` from the installed directory or the run.sh/MindCraftLauncher.exe file
 
 If you encounter issues, check the [FAQ](/FAQ.md) or find support on [discord](https://discord.gg/DNnBQvCtwr). If that fails, you can [create an issue](https://github.com/mindcraft-ce/mindcraft-ce/issues/new).
 
@@ -118,6 +117,7 @@ You can configure the agent's name, model, and prompts in their profile like `an
 | `anthropic` | `ANTHROPIC_API_KEY` | `claude-3-5-haiku-20241022` | [docs](https://docs.anthropic.com/claude/docs/models-overview) |
 | `xai` | `XAI_API_KEY` | `grok-3-mini` | [docs](https://docs.x.ai/docs) |
 | `deepseek` | `DEEPSEEK_API_KEY` | `deepseek-chat` | [docs](https://api-docs.deepseek.com/) |
+| `ollama` (local) | n/a | `ollama/sweaterdog/andy-4` | [docs](https://ollama.com/library) |
 | `qwen` | `QWEN_API_KEY` | `qwen-max` | [Intl.](https://www.alibabacloud.com/help/en/model-studio/developer-reference/use-qwen-by-calling-api)/[cn](https://help.aliyun.com/zh/model-studio/getting-started/models) |
 | `doubao` | `DOUBAO_API_KEY` | `doubao-1-5-pro-32k-250115` | [cn](https://www.volcengine.com/docs/82379/1330310) |
 | `mistral` | `MISTRAL_API_KEY` | `mistral-large-latest` | [docs](https://docs.mistral.ai/getting-started/models/models_overview/) |
