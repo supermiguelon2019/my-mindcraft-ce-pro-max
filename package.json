@@ -32,16 +32,32 @@
         "vec3": "^0.1.10",
         "wav": "^1.0.2",
         "yargs": "^17.7.2",
-        "zero-md": "^3.1.7"
+        "zero-md": "^3.1.7",
+        "codemirror": "^6.0.2",
+        "@codemirror/view": "^6.38.0",
+        "@codemirror/state": "^6.5.2",
+        "@codemirror/lang-json": "^6.0.2",
+        "codemirror-json-schema": "^0.8.1",
+        "@codemirror/basic-setup": "^0.20.0",
+        "esbuild": "^0.25.5",
+        "@codemirror/theme-one-dark": "^6.1.3",
+        "@codemirror/autocomplete": "^6.18.6",
+        "chart.js": "^3.0.0",
+        "node-os-utils": "^1.3.7",
+        "chartjs-plugin-streaming": "^2.0.0",
+        "chartjs-adapter-luxon": "^1.3.1",
+        "minecraftstatuspinger": "^1.2.2"
     },
     "optionalDependencies": {
         "mic": "^2.1.2",
         "naudiodon": "^2.3.6"
     },
     "scripts": {
+        "build": "node gui/build.cjs",
         "postinstall": "patch-package",
         "start": "node main.js",
-        "gui": "electron gui/electron.js"
+        "gui": "electron gui/electron.js",
+        "dev": "npm run build && npm run gui"
     },
     "devDependencies": {
         "@eslint/js": "^9.13.0",

@@ -68,4 +68,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
         callback(_, code);
     }),
     onConsoleOutput: (callback) => ipcRenderer.on('console-output', (_, data) => callback(data)),
+    onStats: (callback) => ipcRenderer.on('system-stats', (_, data) => callback(data)),
+    onStatus: (callback) => ipcRenderer.on('server-stats', (_, data) => callback(data))
 });

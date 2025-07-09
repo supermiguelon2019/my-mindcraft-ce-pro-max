@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>MindCraft-CE Settings</title>
+    <title>mindcraft-ce</title>
     <style>        body {
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
-            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+            background: #000000;
             color: #e0e0e0;
             overflow: hidden;
             height: 100vh;
@@ -14,7 +14,7 @@
 
         #titlebar {
             height: 32px;
-            background: linear-gradient(90deg, #2b5876 0%, #4e4376 100%);
+            background: #0a0a0a;
             -webkit-app-region: drag;
             display: flex;
             justify-content: space-between;
@@ -27,7 +27,7 @@
         #title {
             color: #e0e0e0;
             font-size: 13px;
-            margin: auto auto auto 8px;
+            margin: auto auto auto 2px;
             letter-spacing: 1px;
         }
 
@@ -64,8 +64,9 @@
             width: 92%;
             height: calc(100% - 120px);
             margin: 10px auto;
-            background: linear-gradient(120deg, #232526 0%, #3a3a3a 100%);
+            background: #232526;
             padding: 14px 18px;
+            border: #5a5a5a 1px solid;
             border-radius: 16px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.18);
             overflow-y: auto;
@@ -111,24 +112,24 @@
             margin-bottom: 0;
             border: none;
             border-radius: 12px;
-            background: linear-gradient(120deg, #363636 0%, #232526 100%); /* fallback */
+            background: #000000; /* fallback */
             box-shadow: 0 1px 4px rgba(0,0,0,0.10);
             overflow: hidden;
             transition: box-shadow 0.2s;
         }
         /* Unique, meaningful gradients for each settings group */
-        .setting-group:nth-child(1)  { background: linear-gradient(120deg, #232526 0%, #00b4d8 100%); } /* Connection: blue */
-        .setting-group:nth-child(2)  { background: linear-gradient(120deg, #232526 0%, #43cea2 100%); } /* Mind Server: teal */
-        .setting-group:nth-child(3)  { background: linear-gradient(120deg, #232526 0%, #ffaf7b 100%); } /* Profile: orange */
-        .setting-group:nth-child(4)  { background: linear-gradient(120deg, #232526 0%, #a770ef 100%); } /* General: purple */
-        .setting-group:nth-child(5)  { background: linear-gradient(120deg, #232526 0%, #f7971e 100%); } /* Language & Display: yellow */
-        .setting-group:nth-child(6)  { background: linear-gradient(120deg, #232526 0%, #ff5858 100%); } /* Security: red */
-        .setting-group:nth-child(7)  { background: linear-gradient(120deg, #232526 0%, #43cea2 100%); } /* Performance: teal (alt) */
-        .setting-group:nth-child(8)  { background: linear-gradient(120deg, #232526 0%, #00c3ff 100%); } /* Chat: cyan */
-        .setting-group:nth-child(9)  { background: linear-gradient(120deg, #232526 0%, #f953c6 100%); } /* Logging: pink */
-        .setting-group:nth-child(10) { background: linear-gradient(120deg, #232526 0%, #f857a6 100%); } /* STT Audio: magenta */
-        .setting-group:nth-child(11) { background: linear-gradient(120deg, #232526 0%, #6a82fb 100%); } /* Speech: blue-violet */
-        .setting-group:nth-child(12) { background: linear-gradient(120deg, #232526 0%, #11998e 100%); } /* Autonomous/Idle: green */
+        .setting-group:nth-child(1)  { background: linear-gradient(120deg, #000000 0%, #009dbd 100%); } 
+        .setting-group:nth-child(2)  { background: linear-gradient(120deg, #000000 0%, #7f43ce 100%); } 
+        .setting-group:nth-child(3)  { background: linear-gradient(120deg, #000000 0%, #d67b3e 100%); } 
+        .setting-group:nth-child(4)  { background: linear-gradient(120deg, #000000 0%, #c5d116 100%); } 
+        .setting-group:nth-child(5)  { background: linear-gradient(120deg, #000000 0%, #881c1c 100%); } 
+        .setting-group:nth-child(6)  { background: linear-gradient(120deg, #000000 0%, #1e851b 100%); }
+        .setting-group:nth-child(7)  { background: linear-gradient(120deg, #000000 20%,#43cea2 100%); } 
+        .setting-group:nth-child(8)  { background: linear-gradient(120deg, #000000 0%, #727272 100%); }
+        .setting-group:nth-child(9)  { background: linear-gradient(120deg, #000000 0%, #a63785 100%); }
+        .setting-group:nth-child(10) { background: linear-gradient(120deg, #000000 0%, #bd1842 100%); }
+        .setting-group:nth-child(11) { background: linear-gradient(120deg, #000000 0%, #846afb 100%); }
+        .setting-group:nth-child(12) { background: linear-gradient(120deg, #000000 0%, #11998e 100%); }
         .setting-group summary {
             padding: 13px 18px;
             background: rgba(0,0,0,0.18);
@@ -157,20 +158,18 @@
             letter-spacing: 0.5px;
         }
         input[type="text"],
-        input[type="number"],
         select {
             width: 100%;
             padding: 7px 10px;
             border: 1px solid #404040;
             border-radius: 6px;
             box-sizing: border-box;
-            background: linear-gradient(90deg, #232526 0%, #414345 100%);
+            background: #000000;
             color: #e0e0e0;
             font-size: 1em;
             transition: border 0.2s;
         }
         input[type="text"]:focus,
-        input[type="number"]:focus,
         select:focus {
             outline: none;
             border-color: #00b4d8;
@@ -200,33 +199,38 @@
             font-weight: 500;
             transition: all 0.2s;
             min-width: 110px;
-            background: linear-gradient(90deg, #00b4d8 0%, #43cea2 100%);
+            background: lightskyblue;
             color: #fff;
         }
         button:hover {
-            background: linear-gradient(90deg, #43cea2 0%, #00b4d8 100%);
+            background: lightblue;
         }
         #startButton {
-            background: linear-gradient(90deg, #2ecc71 0%, #43cea2 100%);
+            background: #2ecc71;
         }
         #startButton:hover {
-            background: linear-gradient(90deg, #43cea2 0%, #2ecc71 100%);
+            background: #129248;
         }
         #stopButton {
-            background: linear-gradient(90deg, #e74c3c 0%, #ffaf7b 100%);
+            background: #e74c3c;
         }
         #stopButton:hover {
-            background: linear-gradient(90deg, #ffaf7b 0%, #e74c3c 100%);
+            background: #b63628;
         }
         #resetButton {
-            background: linear-gradient(90deg, #424242 0%, #232526 100%);
-            margin-top: 20px;
+            background-color:#555555;
+            color:white;
+            margin-bottom:30px;
+            display:block;
+            margin-top: 30px;
+            margin-left:auto;
+            margin-right:auto;
         }
         #resetButton:hover {
-            background: linear-gradient(90deg, #232526 0%, #424242 100%);
+            background: #424242;
         }
         #addProfile, #deleteProfile, #editProfile {
-            background: linear-gradient(90deg, #00b4d8 0%, #43cea2 100%);
+            background: #3b9cd8;
             color: white;
             border: none;
             padding: 8px 18px;
@@ -237,7 +241,7 @@
             transition: background 0.2s;
         }
         #addProfile:hover, #deleteProfile:hover, #editProfile:hover {
-            background: linear-gradient(90deg, #43cea2 0%, #00b4d8 100%);
+            background: #1f7aa7;
         }
         .button-group {
             display: flex;
@@ -264,6 +268,9 @@
         .modal {
             display: none;
             position: fixed;
+            overflow: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
             z-index: 1000;
             left: 0;
             top: 0;
@@ -271,6 +278,11 @@
             height: 100%;
             background: rgba(0,0,0,0.4);
         }
+
+        .modal::-webkit-scrollbar {
+            display: none;
+        }
+
         .modal-content {
             background: linear-gradient(120deg, #232526 0%, #363636 100%);
             margin: 8% auto;
@@ -307,10 +319,11 @@
         .advanced-fields label { min-width: 90px; text-align: left; margin-right: 10px; }
         .advanced-fields input[type="text"] { flex: 1; min-width: 0; margin-left: 18px; }
         #icon {
-            width: 20px;
-            height: 20px;
+            width: 12.5px;
+            height: 12.5px;
             margin-right: 6px;
             vertical-align: middle;
+            margin-bottom: 4px;
         }
         /* Tab bar */
         .tab {
@@ -318,13 +331,11 @@
             padding: 5px 0 5px 50px;
             display: flex;
             gap: 5px;
-            border-bottom: 1px solid #333;
         }
         .tab button {
             -webkit-app-region: no-drag;
             background: none;
             border: none;
-            /** outline: 1px solid greenyellow; **/
             cursor: pointer;
             padding: 7px 22px;
             margin: 0 2px;
@@ -334,11 +345,11 @@
             transition: background 0.2s, color 0.2s;
         }
         .tab button:hover {
-            background: linear-gradient(90deg, #43cea2 0%, #00b4d8 100%);
+            background: #181818;
             color: #fff;
         }
         .tab button.active {
-            background: linear-gradient(90deg, #00b4d8 0%, #43cea2 100%);
+            background: #202020;
             color: #fff;
         }
         .tabcontent {
@@ -346,28 +357,146 @@
             height: calc(100vh - 50px);
             overflow-y: auto;
             padding: 18px 0 0 0;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .tabcontent::-webkit-scrollbar {
+            display: none;
         }
         #home .setting-item, #home .button-container {
-            max-width: 420px;
             margin-left: auto;
             margin-right: auto;
         }
         #home h1 {
             margin-top: 18px;
+            font-size: 50px;
+            color: #ffffff;
         }
-        /* Settings grid container */
         #settings .container {
-            height: calc(100% - 50px);
-            background: none;
+            height: fit-content;
             box-shadow: none;
-            padding: 0;
+            background: #2c2d2e6e;
         }
         #settings .settings-grid {
             margin-top: 0;
         }
         #docs {
             padding: 20px;
-            background-color: #0d1117;
+            background-color: transparent;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        #docs::-webkit-scrollbar {
+            display: none;
+        }
+
+        #json-editor {
+            resize: vertical;
+            width: 100%;
+            height: 100px;
+            background-color: #232526;
+            border-radius: 10px;
+            overflow: auto;
+            scrollbar-width: none;
+        }
+
+        #json-editor::-webkit-scrollbar {
+            display: none;
+        }
+
+        .CodeMirror {
+        height: 200px;
+        border: 1px solid #ccc;
+        }
+        #json-error {
+        color: red;
+        font-size: 14px;
+        margin-top: 4px;
+        }
+        #home-button-container {
+            background: #393b3c;
+            border-radius: 10px;
+            padding: 10px;
+            width: fit-content;
+        }
+        #profiles option {
+            border-radius: 5px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 columns */
+            gap: 10px;
+            padding: 20px;
+        }
+        .grid-container .grid-item {
+            padding: 20px;
+            background: #50505057;
+            border-radius: 20px;
+            border: #6d6d6d 1px solid;
+            min-width: 0px;
+            min-height: 0px;
+        }
+        #stolen-smoke-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        #chartContainer {
+            padding: 0;
+            padding-bottom: 20px;
+        }
+        #homeConsoleOutput {
+            left:24px;
+            right:24px;
+            top:64px;
+            bottom:24px;
+            background:#181c20cc;
+            border-radius:8px;
+            padding:18px;
+            overflow-y:auto;
+            font-family:monospace;
+            font-size:1.1em;
+            color:#90e0ef;
+            box-shadow:0 1px 4px rgba(0,0,0,0.10);
+            height: 200px;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            text-wrap: balance;
+        }
+        #homeConsoleOutput::-webkit-scrollbar {
+            display: none;
+        }
+        #consoleOutput {
+            position:absolute;
+            left:24px;
+            right:24px;
+            top:64px;
+            bottom:24px;
+            background:#181c20cc;
+            border-radius:8px;
+            padding:18px;
+            overflow-y:auto;
+            font-family:monospace;
+            font-size:1.1em;
+            color:#90e0ef;
+            box-shadow:0 1px 4px rgba(0,0,0,0.10);
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            text-wrap: balance;
+        }
+        #consoleOutput::-webkit-scrollbar {
+            display: none;
+        }
+        :root {
+            --circle-color: red;
+        }
+
+        svg circle {
+            fill: var(--circle-color);
         }
     </style>
 </head>
@@ -375,9 +504,9 @@
     <div id="titlebar">
         <div style="display: flex;">
             <div style="margin: auto;">
-                <img src="icon.ico" alt="icon" id="icon" />
+                <img src="icon.svg" alt="icon" id="icon" />
             </div>
-            <div id="title">MindCraft-CE</div>
+            <div id="title">mindcraft-ce</div>
                 <div class="tab">
 
                 <script>
@@ -418,27 +547,46 @@
             <button class="window-control" id="close-button">✕</button>
         </div>
     </div>
-    
+    <canvas id="stolen-smoke-canvas"></canvas>
     <div id="content-area">
         <div id="home" class="tabcontent">
             <div style="text-align: center;">
-                <h1>Welcome to MindCraft-CE</h1>
+                <h1>Welcome to mindcraft-ce</h1>
             </div>
-            <div class="setting-item">
-                <label for="minecraft_version" title="Supports up to 1.21.4">Minecraft Version:</label>
-                <input type="text" id="home_minecraft_version" />
-            </div>
-            <div class="setting-item">
-                <label for="host" title="Use 'localhost' or your IP address">Host:</label>
-                <input type="text" id="home_host" />
-            </div>
-            <div class="setting-item">
-                <label for="port">Port:</label>
-                <input type="number" id="home_port" />
-            </div>
-            <div class="button-container">
-                <button id="stopButton">Stop</button>
-                <button id="startButton">Start</button>
+            
+            <div class="grid-container">
+                <div class="grid-item">
+                    <div class="setting-item">
+                        <label for="host" title="Use 'localhost' or your IP address">Host:</label>
+                        <input type="text" id="home_host" />
+                    </div>
+                    <div class="setting-item">
+                        <label for="port">Port:</label>
+                        <input type="text" id="home_port" />
+                    </div>
+                    <div class="button-container" id="home-button-container">
+                        <button id="stopButton">Stop</button>
+                        <button id="startButton">Start</button>
+                    </div>
+                </div>
+                <div class="grid-item" id="chartContainer">
+                    <canvas id="statsChart"></canvas>
+                </div>
+                <div class="grid-item">
+                    <div id="homeConsoleOutput" style="left:24px;right:24px;top:64px;bottom:24px;background:#181c20cc;border-radius:8px;padding:18px;overflow-y:auto;font-family:monospace;font-size:1.1em;color:#90e0ef;box-shadow:0 1px 4px rgba(0,0,0,0.10);"></div>
+                </div>
+                <div class="grid-item">
+                    <div id="loading">
+                        <h1>status</h1>
+                        <div style="display: flex;">
+                            <p style="font-size: large;" id="status-text">server version mismatch</p>
+                            <svg width="20" height="20" style="align-self: center; margin: 10px;">
+                                <circle id="myCircle" cx="10" cy="12" r="6" />
+                            </svg>
+                        </div>
+                    </div>
+                    <iframe id="View" src="" style="display:none; width:100%; height:100%; border:none; border-radius: 20px;"></iframe>
+                </div>
             </div>
         </div>
         <div id="settings" class="tabcontent">
@@ -447,17 +595,13 @@
                 <details class="setting-group" open>
                     <summary>Connection Settings</summary>
                     <div class="settings-content">
-                        <div class="setting-item">
-                            <label for="minecraft_version" title="Supports up to 1.21.4">Minecraft Version:</label>
-                            <input type="text" id="minecraft_version" />
-                        </div>
                     <div class="setting-item">
                         <label for="host" title="Use 'localhost' or your IP address">Host:</label>
                         <input type="text" id="host" />
                     </div>
                     <div class="setting-item">
                         <label for="port">Port:</label>
-                        <input type="number" id="port" />
+                        <input type="text" id="port" />
                     </div>
                     <div class="setting-item">
                         <label for="auth" title="Choose between offline or Microsoft authentication">Authentication:</label>
@@ -481,7 +625,7 @@
                     </div>
                     <div class="setting-item">
                         <label for="mindserver_port">Mind Server Port:</label>
-                        <input type="number" id="mindserver_port" />
+                        <input type="text" id="mindserver_port" />
                     </div>
                 </div>
                 </details>
@@ -583,7 +727,16 @@
                                         <div class="setting-item"><label for="profileSpeakModelParams">Params (JSON):</label><input type="text" id="profileSpeakModelParams" placeholder='{"key": "value"}'></div>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="collapsible-model">
+                                    <div id="extras" class="main-model-row">
+                                        <label for="profileExtras">Extras:</label>
+                                        <button type="button" class="arrow-btn" data-target="extras-advanced-fields">&#9654;</button>
+                                    </div>
+                                    <div class="advanced-fields" id="extras-advanced-fields" style="display:none;">
+                                        <div id="json-editor" style="height: 300px; border: 1px solid #ccc;"></div>
+                                        <div id="json-error"></div>
+                                    </div>
+                                </div>
                             <div class="button-container">
                                 <button type="button" id="saveProfile">Save</button>
                             </div>
@@ -661,11 +814,11 @@
                     <div class="settings-content">
                         <div class="setting-item">
                             <label for="code_timeout_mins" title="Minutes code is allowed to run. -1 for no timeout">Code Timeout (mins):</label>
-                            <input type="number" id="code_timeout_mins" />
+                            <input type="text" id="code_timeout_mins" />
                         </div>
                         <div class="setting-item">
                             <label for="relevant_docs_count" title="Number of relevant code function docs to select. -1 for all">Relevant Docs Count:</label>
-                            <input type="number" id="relevant_docs_count" />
+                            <input type="text" id="relevant_docs_count" />
                         </div>
                     </div>
                 </details>
@@ -675,15 +828,15 @@
                     <div class="settings-content">
                         <div class="setting-item">
                             <label for="max_messages" title="Max number of messages to keep in context">Max Messages:</label>
-                            <input type="number" id="max_messages" />
+                            <input type="text" id="max_messages" />
                         </div>
                         <div class="setting-item">
                             <label for="num_examples" title="Number of examples to give to the model">Number of Examples:</label>
-                            <input type="number" id="num_examples" />
+                            <input type="text" id="num_examples" />
                         </div>
                         <div class="setting-item">
                             <label for="max_commands" title="Max commands in consecutive responses. -1 for no limit">Max Commands:</label>
-                            <input type="number" id="max_commands" />
+                            <input type="text" id="max_commands" />
                         </div>
                         <div class="setting-item">
                             <label for="verbose_commands" title="Show full command syntax">Verbose Commands:</label>
@@ -734,19 +887,19 @@
                     <div class="settings-content">
                         <div class="setting-item">
                             <label for="stt_rms_threshold" title="Audio level threshold">RMS Threshold:</label>
-                            <input type="number" id="stt_rms_threshold" />
+                            <input type="text" id="stt_rms_threshold" />
                         </div>
                         <div class="setting-item">
                             <label for="stt_silence_duration" title="Silence duration before stopping (ms)">Silence Duration (ms):</label>
-                            <input type="number" id="stt_silence_duration" />
+                            <input type="text" id="stt_silence_duration" />
                         </div>
                         <div class="setting-item">
                             <label for="stt_min_audio_duration" title="Minimum audio duration in seconds">Min Audio Duration (s):</label>
-                            <input type="number" id="stt_min_audio_duration" step="0.1" />
+                            <input type="text" id="stt_min_audio_duration" step="0.1" />
                         </div>
                         <div class="setting-item">
                             <label for="stt_max_audio_duration" title="Maximum audio duration in seconds">Max Audio Duration (s):</label>
-                            <input type="number" id="stt_max_audio_duration" />
+                            <input type="text" id="stt_max_audio_duration" />
                         </div>
                         <div class="setting-item">
                             <label for="stt_debug_audio" title="Enable audio debugging">Debug Audio:</label>
@@ -754,15 +907,15 @@
                         </div>
                         <div class="setting-item">
                             <label for="stt_cooldown_ms" title="Minimum time between recordings (ms)">Cooldown (ms):</label>
-                            <input type="number" id="stt_cooldown_ms" />
+                            <input type="text" id="stt_cooldown_ms" />
                         </div>
                         <div class="setting-item">
                             <label for="stt_speech_threshold_ratio" title="Speech detection threshold">Speech Threshold Ratio:</label>
-                            <input type="number" id="stt_speech_threshold_ratio" step="0.01" />
+                            <input type="text" id="stt_speech_threshold_ratio" step="0.01" />
                         </div>
                         <div class="setting-item">
                             <label for="stt_consecutive_speech_samples" title="Number of consecutive speech samples needed">Consecutive Speech Samples:</label>
-                            <input type="number" id="stt_consecutive_speech_samples" />
+                            <input type="text" id="stt_consecutive_speech_samples" />
                         </div>
                     </div>
                 </details>
@@ -798,7 +951,7 @@
                         </div>
                         <div class="setting-item">
                             <label for="auto_idle_trigger_timeout_secs">Idle Timeout (secs):</label>
-                            <input type="number" id="auto_idle_trigger_timeout_secs" />
+                            <input type="text" id="auto_idle_trigger_timeout_secs" />
                         </div>
                         <div class="setting-item">
                             <label for="auto_idle_trigger_message">Idle Message:</label>
@@ -808,18 +961,43 @@
                 </details>
                 <div id="status" class="status" style="display: none;"></div>
             </div>
-            <button id="resetButton" style="background-color:#424242;color:white;margin-bottom:30px;display:block;margin-left:auto;margin-right:auto;">Reset</button>
+            <button id="resetButton">Reset</button>
         </div>
     </div>
 
     <div id="docs" class="tabcontent">
-        <zero-md></zero-md>
+        <zero-md>
+            <template data-append>
+                <style>
+                :host {
+                    background: transparent !important;
+                    contain: none; /* Un-disable styling */
+                }
+
+                .markdown-body {
+                    background: transparent !important;
+                    --bgColor-muted: transparent !important;
+                    --bgColor-default: #ffffff10 !important;
+                }
+
+                .hljs {
+                    background: #0000006b;
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+                .hljs::-webkit-scrollbar {
+                    display: none;
+                }
+                </style>
+            </template>
+        </zero-md>
     </div>
     <div id="console" class="tabcontent" style="display:none;position:absolute;left:0;top:32px;right:0;bottom:0;width:100vw;height:calc(100vh - 32px);padding:0;margin:0;background:transparent;z-index:2;">
         <h2 style="color:#00b4d8;margin:24px 0 8px 0;text-align:center;font-size:1.5em;">Console</h2>
-        <div id="consoleOutput" style="position:absolute;left:24px;right:24px;top:64px;bottom:24px;background:#181c20;border-radius:8px;padding:18px;overflow-y:auto;font-family:monospace;font-size:1.1em;color:#90e0ef;box-shadow:0 1px 4px rgba(0,0,0,0.10);"></div>
+        <div id="consoleOutput"></div>
     </div>
-    <script type="module" src="renderer.js"></script>
+
+    <script type="module" src="dist/renderer.js"></script>
     <script>
             // Get the element with id="homeButton" and click on it
             document.getElementById("homeButton").click();

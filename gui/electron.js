@@ -6,7 +6,6 @@ import { app, BrowserWindow, ipcMain, Tray, Menu } from 'electron';
 import Store from 'electron-store';
 import { readFileSync, writeFileSync, existsSync, readdirSync, unlinkSync } from 'fs';
 import defaultSettings from '../settings.js';
-import { table } from 'node:console';
 
 // Set up paths FIRST
 const __filename = fileURLToPath(import.meta.url);
@@ -60,12 +59,14 @@ ipcMain.on('close-window', () => {
 
 async function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 800,
+        width: 765,
         height: 800,
         center: true,  // Add this to center window
         frame: false,
         resizable: true,
         icon: join(__dirname, 'icon.ico'), // Set app icon
+        minHeight: 0,
+        minWidth: 765,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: true,
@@ -77,6 +78,7 @@ async function createWindow() {
         mainWindow = null;
     });
     await mainWindow.loadFile(join(__dirname, 'index.html'));
+    mainWindow.webContents.send('console-output', "this is a console");
 }
 
 // Initialize app when ready
@@ -198,8 +200,7 @@ function getProfilesRecursively(dir, baseDir) {
     return profiles.sort((a, b) => a.localeCompare(b));
 }
 
-// Save settings
-ipcMain.handle('save-settings', (event, newSettings) => {
+function saveSettings(newSettings) {
     try {
         // Filter out UI-specific properties and only keep known settings
         const validSettings = {};
@@ -233,9 +234,207 @@ ipcMain.handle('save-settings', (event, newSettings) => {
         console.error('Error saving settings:', error);
         throw error;
     }
+}
+
+// Save settings
+ipcMain.handle('save-settings', (event, newSettings) => {
+    saveSettings(newSettings);
 });
 
-// Start main process
+import nou from 'node-os-utils';
+import { exec } from 'node:child_process';
+import util from 'util';
+const execAsync = util.promisify(exec);
+import fs from 'node:fs';
+
+async function detectGpuVendor() {
+  try {
+    await execAsync('nvidia-smi -L');
+    return 'nvidia';
+  } catch {/* nothing here */}
+
+  try {
+    await execAsync('rocm-smi --showproductname');
+    return 'amd-rocm';
+  } catch {/* nothing above */}
+
+  try {
+    await execAsync('radeon-smi -d');
+    return 'amd';
+  } catch {/* something below */}
+
+  return 'unknown';
+}
+
+async function getGpuUsage() {
+  const vendor = await detectGpuVendor();
+
+  try {
+    if (vendor === 'nvidia') {
+      const { stdout } = await execAsync('nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total --format=csv,noheader,nounits');
+      const lines = stdout.trim().split('\n');
+
+      let totalGpuUtil = 0;
+      let totalMemUsed = 0;
+      let totalMem = 0;
+
+      for (const line of lines) {
+        const [gpuUtil, memUsed, memTotal] = line.split(',').map(v => parseFloat(v.trim()));
+        totalGpuUtil += gpuUtil;
+        totalMemUsed += memUsed;
+        totalMem += memTotal;
+      }
+
+      return {
+        gpuVendor: 'nvidia',
+        gpuUsage: (totalGpuUtil / lines.length).toFixed(2),
+        vramUsage: ((totalMemUsed / totalMem) * 100).toFixed(2)
+      };
+    }
+
+    if (vendor === 'amd-rocm') {
+      const { stdout } = await execAsync('rocm-smi --showuse --json');
+      const data = JSON.parse(stdout);
+
+      let totalGpuUtil = 0;
+      let totalMemUsed = 0;
+      let totalMem = 0;
+      let count = 0;
+
+      for (const key of Object.keys(data)) {
+        const g = data[key];
+        if (!g['GPU use (%)']) continue;
+
+        totalGpuUtil += parseFloat(g['GPU use (%)']);
+        totalMemUsed += parseFloat(g['VRAM Used (MiB)']);
+        totalMem += parseFloat(g['VRAM Total (MiB)']);
+        count++;
+      }
+
+      return {
+        gpuVendor: 'amd-rocm',
+        gpuUsage: (totalGpuUtil / count).toFixed(2),
+        vramUsage: ((totalMemUsed / totalMem) * 100).toFixed(2)
+      };
+    }
+
+    if (vendor === 'amd') {
+      const { stdout } = await execAsync('radeon-smi --showuse --json');
+      const data = JSON.parse(stdout);
+
+      let totalGpuUtil = 0;
+      let totalMemUsed = 0;
+      let totalMem = 0;
+      let count = 0;
+
+      for (const g of data) {
+        if (!g['GPU use (%)']) continue;
+
+        totalGpuUtil += parseFloat(g['GPU use (%)']);
+        totalMemUsed += parseFloat(g['VRAM Used (MiB)']);
+        totalMem += parseFloat(g['VRAM Total (MiB)']);
+        count++;
+      }
+
+      return {
+        gpuVendor: 'amd',
+        gpuUsage: (totalGpuUtil / count).toFixed(2),
+        vramUsage: ((totalMemUsed / totalMem) * 100).toFixed(2)
+      };
+    }
+
+    return {
+      gpuVendor: 'unknown',
+      gpuUsage: null,
+      vramUsage: null
+    };
+  } catch (err) {
+    console.error(`Error reading GPU stats for ${vendor}:`, err.message);
+    return {
+      gpuVendor: vendor,
+      gpuUsage: null,
+      vramUsage: null
+    };
+  }
+}
+
+setInterval(async () => {
+    
+    const cpu = await nou.cpu.usage();
+    const memory = await (await nou.mem.info()).usedMemPercentage;
+
+    const gpu = await getGpuUsage();
+    const gpuUsage = Number(gpu.gpuUsage);
+    const VRAM = Number(gpu.vramUsage);
+
+    mainWindow.webContents.send('system-stats', {
+        cpu: cpu,
+        memory: memory,
+        gpu: gpuUsage,
+        vram: VRAM
+    });
+    console.log('Sent system stats:', {
+        cpu: cpu,
+        memory: memory,
+        gpuUsage: gpuUsage,
+        VRAM: VRAM
+    });
+  }, 1000);
+
+import mc from 'minecraftstatuspinger';
+
+async function checkServer(host = '127.0.0.1', port = 25565, botCount = 1) {
+  try {
+    const res = await mc.lookup({
+      host,
+      port,
+      ping: false,       // Skip latency measurement for speed
+      timeout: 2000,     // Faster timeout
+      throwOnParseError: false,
+      SRVLookup: false,
+      JSONParse: true
+    });
+
+    const online = res.status.players.online;
+    const max = res.status.players.max;
+    const version = res.status.version.name;
+    const available = max - online;
+    const mods = res.status.isModded;
+    const ChatReports = res.status.preventsChatReports;
+
+    return {
+      version,
+      online,
+      max,
+      available,
+      canFit: available >= botCount,
+      modsRequired: mods,
+      ChatReports,
+      raw: res.status
+    };
+  } catch (_err) {
+    return { canFit: false, error: 'Server unreachable or offline' };
+  }
+}
+
+async function serverIntervalFunc() {
+
+    const server_stats = await checkServer(settings.host, settings.port, settings.profiles.length );
+    
+    mainWindow.webContents.send('server-stats', server_stats );
+
+    if (!server_stats.error) {
+        saveSettings({minecraft_version: server_stats.version});
+        console.log(server_stats);
+    } else {
+        console.log(server_stats.error);
+    }
+
+}
+
+let serverInterval = setInterval(serverIntervalFunc, 1000);
+let serverIntervalOn = true;
+
 ipcMain.handle('start-main', async () => {      
     try {
         const mainPath = join(__dirname, '../main.js');
@@ -250,6 +449,9 @@ ipcMain.handle('start-main', async () => {
                 ...process.env,
             }
         });
+
+        clearInterval(serverInterval);
+        serverIntervalOn = false;
 
         // Forward stdout to renderer
         if (mainProcess.stdout) {
@@ -278,6 +480,9 @@ ipcMain.handle('start-main', async () => {
                 clearTimeout(startupTimeout);
                 mainWindow.webContents.send('main-error', err.message);
                 reject(err);
+                if (!serverIntervalOn){
+                    serverInterval = setInterval(serverIntervalFunc, 1000);
+                }
             });
             
             mainProcess.on('exit', (code) => {
@@ -288,20 +493,16 @@ ipcMain.handle('start-main', async () => {
                     mainWindow.webContents.send('main-exit', errorMsg);
                     reject(new Error(errorMsg));
                 }
-            });            startupTimeout = setTimeout(() => {
+                if (!serverIntervalOn){
+                    serverInterval = setInterval(serverIntervalFunc, 1000);
+                }
+            });            
+            startupTimeout = setTimeout(() => {
                 if (mainProcess.connected) {
                     console.log('Main process started successfully');
                     mainWindow.webContents.send('startup-status', 'Main process started successfully');
                     
                     
-                    // Set up window behavior
-                    mainWindow.on('close', (event) => {
-                        if (!app.isQuitting) {
-                            event.preventDefault();
-                            mainWindow.hide();
-                        }
-                        // else: let the app quit normally
-                    });
 
                     // Show window initially
                     mainWindow.show();
@@ -311,7 +512,7 @@ ipcMain.handle('start-main', async () => {
                     mainWindow.webContents.send('main-error', error.message);
                     reject(error);
                 }
-            }, 5000); // Increased timeout to 5 seconds
+            }, 5000); 
         });
     } catch (error) {
         console.error('Error starting main.js:', error);
