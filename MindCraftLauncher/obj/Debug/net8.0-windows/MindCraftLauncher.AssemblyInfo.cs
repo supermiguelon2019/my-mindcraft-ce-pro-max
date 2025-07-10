@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MindCraftLauncher")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+44e63e93d36f3827fc34dbb5f800387d3a591017")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0c369282242e7015e39fda3f3295b4dd0f54a85e")]
 [assembly: System.Reflection.AssemblyProductAttribute("MindCraftLauncher")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MindCraftLauncher")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

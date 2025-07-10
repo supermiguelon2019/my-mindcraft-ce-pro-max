@@ -528,8 +528,7 @@ async function checkServer(host = '127.0.0.1', port = -1, botCount = 1) {
       available,
       canFit: available >= botCount,
       modsRequired: !!mods,
-      ChatReports: !!chatRestrict,
-      raw: res.status
+      ChatReports: !!chatRestrict
     };
   } catch(err) {
     return { canFit: false, error: 'Server unreachable or offline, '+err };
@@ -681,10 +680,15 @@ ipcMain.handle('delete-profile', (event, profile) => {
 // Get profile content handler
 ipcMain.handle('get-profile-content', (event, path) => {
     try {
-        const fullPath = join(rootDir, path.replace(/^\.\//, ''));
+        const fullPath = join(rootDir, path);
+        console.log(fullPath);
         if (existsSync(fullPath)) {
+            console.log("☺");
             const content = readFileSync(fullPath, 'utf8');
-            return JSON.parse(content);
+            console.log(content);
+            const parsed = JSON.parse(content);
+            console.log(parsed);
+            return parsed;
         }
         return null;
     } catch (error) {

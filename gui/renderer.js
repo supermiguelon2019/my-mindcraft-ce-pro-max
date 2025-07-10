@@ -2,6 +2,42 @@ import ZeroMd from '../node_modules/zero-md/src/lib/zero-md.js';
 
 customElements.define('zero-md', ZeroMd);
 
+import { EditorView, basicSetup } from 'codemirror';
+import { json } from '@codemirror/lang-json';
+import { jsonSchema } from 'codemirror-json-schema';
+import { oneDark } from '@codemirror/theme-one-dark';
+
+const schema = {
+    type: 'object',
+    properties: {
+        cooldown: { type: 'number', title: 'Cooldown (seconds)' },
+        conversing: { type: 'string', title: 'Conversing' },
+        coding: { type: 'string', title: 'Coding' },
+        saving_memory: { type: 'string', title: 'Saving Memory' },
+        bot_responder: { type: 'string', title: 'Bot Responder' },
+        image_analysis: { type: 'string', title: 'Image Analysis' },
+        speak_model: { type: 'string', title: 'Speak Model' },
+        modes: { 
+        type: 'object', 
+        title: 'Modes',
+        properties: {
+            self_preservation: { type: 'boolean' },
+            unstuck: { type: 'boolean' },
+            cowardice: { type: 'boolean' },
+            self_defense: { type: 'boolean' },
+            hunting: { type: 'boolean' },
+            item_collecting: { type: 'boolean' },
+            torch_placing: { type: 'boolean' },
+            elbow_room: { type: 'boolean' },
+            idle_staring: { type: 'boolean' },
+            cheat: { type: 'boolean' }
+        },
+        required: []
+        }
+    },
+    required: []
+    };
+
 // Persist details open/closed state
 document.addEventListener('DOMContentLoaded', () => {
     // Load saved states
@@ -381,30 +417,49 @@ function showStatus(message, type) {
         status.style.display = 'none';
     }, 3000);
 }
-
+let editor;
 // Profile management functions
 function openProfileEditor(profilePath = null) {
     const modal = document.getElementById('profileModal');
     const form = document.getElementById('profileForm');
     const title = document.getElementById('profileModalTitle');
-
+    
     // Helper to set model section fields
     function setModelSectionFields(prefix, data) {
-        document.getElementById(prefix + 'Api').value = data?.api || '';
-        document.getElementById(prefix + 'Model').value = data?.model || '';
-        document.getElementById(prefix + 'Url').value = data?.url || '';
-        document.getElementById(prefix + 'Params').value = data?.params ? JSON.stringify(data.params, null, 2) : '';
+        if (typeof(data) == "object") {
+            document.getElementById(prefix + 'Api').value = data?.api || '';
+            document.getElementById(prefix + 'Model').value = data?.model || '';
+            document.getElementById(prefix + 'Url').value = data?.url || '';
+        } else {
+            document.getElementById(prefix + 'Model').value = data || '';
+        }
     }
 
     if (profilePath) {
         title.textContent = 'Edit Profile';
         window.electronAPI.getProfileContent(profilePath).then(profile => {
+
+            const { name, model, code_model, vision_model, embedding, speak_model, ...extras } = profile;
+            form.reset();
             document.getElementById('profileName').value = profile.name || '';
-            setModelSectionFields('profileModel', profile.model);
-            setModelSectionFields('profileCodeModel', profile.code_model);
-            setModelSectionFields('profileVisionModel', profile.vision_model);
-            setModelSectionFields('profileEmbedding', profile.embedding);
-            setModelSectionFields('profileSpeakModel', profile.speak_model);
+            setModelSectionFields('profileModel', model);
+            setModelSectionFields('profileCodeModel', code_model);
+            setModelSectionFields('profileVisionModel', vision_model);
+            setModelSectionFields('profileEmbedding', embedding);
+            setModelSectionFields('profileSpeakModel', speak_model);
+            console.log(extras);
+            editor = new EditorView({
+                doc: JSON.stringify(extras),
+                extensions: [
+                    basicSetup,
+                    json(),
+                    jsonSchema(schema),
+                    //hideLineNumbers,
+                    oneDark
+                ],
+                parent: document.getElementById('json-editor')
+                });
+
             form.dataset.path = profilePath;
         });
     } else {
@@ -415,69 +470,26 @@ function openProfileEditor(profilePath = null) {
             setModelSectionFields(prefix, {});
         });
         delete form.dataset.path;
+        editor = new EditorView({
+                doc: '{\n\t\n}',
+                extensions: [
+                    basicSetup,
+                    json(),
+                    jsonSchema(schema),
+                    //hideLineNumbers,
+                    oneDark
+                ],
+                parent: document.getElementById('json-editor')
+                });
     }
 
     modal.style.display = 'block';
 }
 
-import { EditorView, basicSetup } from 'codemirror';
-import { json } from '@codemirror/lang-json';
-import { jsonSchema } from 'codemirror-json-schema';
-import { oneDark } from '@codemirror/theme-one-dark';
 
-// Create an extension to turn line numbers off
-const hideLineNumbers = EditorView.theme({
-  '.cm-gutters': {
-    display: 'none'
-  }
-});
-
-const schema = {
-  type: 'object',
-  properties: {
-    cooldown: { type: 'number', title: 'Cooldown (seconds)' },
-    conversing: { type: 'string', title: 'Conversing' },
-    coding: { type: 'string', title: 'Coding' },
-    saving_memory: { type: 'string', title: 'Saving Memory' },
-    bot_responder: { type: 'string', title: 'Bot Responder' },
-    image_analysis: { type: 'string', title: 'Image Analysis' },
-    speak_model: { type: 'string', title: 'Speak Model' },
-    modes: { 
-      type: 'object', 
-      title: 'Modes',
-      properties: {
-        self_preservation: { type: 'boolean' },
-        unstuck: { type: 'boolean' },
-        cowardice: { type: 'boolean' },
-        self_defense: { type: 'boolean' },
-        hunting: { type: 'boolean' },
-        item_collecting: { type: 'boolean' },
-        torch_placing: { type: 'boolean' },
-        elbow_room: { type: 'boolean' },
-        idle_staring: { type: 'boolean' },
-        cheat: { type: 'boolean' }
-      },
-      required: []
-    }
-  },
-  required: []
-};
-
-
-
-const editor = new EditorView({
-  doc: '{\n\t\n}',
-  extensions: [
-    basicSetup,
-    json(),
-    jsonSchema(schema),
-    //hideLineNumbers,
-    oneDark
-  ],
-  parent: document.getElementById('json-editor')
-});
 
 function saveProfile() {
+    editor.destroy();
     const form = document.getElementById('profileForm');
     // Helper to get model section fields as object or string
     function getModelSectionFields(prefix) {
@@ -697,6 +709,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('saveProfile').addEventListener('click', saveProfile);
     document.getElementById('deleteProfile').addEventListener('click', deleteProfile);
     document.querySelector('.close').addEventListener('click', () => {
+        editor.destroy();
         document.getElementById('profileModal').style.display = 'none';
     });
     const mdViewer = document.querySelector('zero-md');

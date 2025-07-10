@@ -73745,6 +73745,36 @@ adapters._date.override({
 
 // gui/renderer.js
 customElements.define("zero-md", ZeroMd);
+var schema4 = {
+  type: "object",
+  properties: {
+    cooldown: { type: "number", title: "Cooldown (seconds)" },
+    conversing: { type: "string", title: "Conversing" },
+    coding: { type: "string", title: "Coding" },
+    saving_memory: { type: "string", title: "Saving Memory" },
+    bot_responder: { type: "string", title: "Bot Responder" },
+    image_analysis: { type: "string", title: "Image Analysis" },
+    speak_model: { type: "string", title: "Speak Model" },
+    modes: {
+      type: "object",
+      title: "Modes",
+      properties: {
+        self_preservation: { type: "boolean" },
+        unstuck: { type: "boolean" },
+        cowardice: { type: "boolean" },
+        self_defense: { type: "boolean" },
+        hunting: { type: "boolean" },
+        item_collecting: { type: "boolean" },
+        torch_placing: { type: "boolean" },
+        elbow_room: { type: "boolean" },
+        idle_staring: { type: "boolean" },
+        cheat: { type: "boolean" }
+      },
+      required: []
+    }
+  },
+  required: []
+};
 document.addEventListener("DOMContentLoaded", () => {
   const savedStates = JSON.parse(localStorage.getItem("settingGroupStates") || "{}");
   document.querySelectorAll(".setting-group").forEach((group) => {
@@ -74064,25 +74094,43 @@ function showStatus(message, type) {
     status.style.display = "none";
   }, 3e3);
 }
+var editor;
 function openProfileEditor(profilePath = null) {
   const modal = document.getElementById("profileModal");
   const form = document.getElementById("profileForm");
   const title = document.getElementById("profileModalTitle");
   function setModelSectionFields(prefix, data) {
-    document.getElementById(prefix + "Api").value = data?.api || "";
-    document.getElementById(prefix + "Model").value = data?.model || "";
-    document.getElementById(prefix + "Url").value = data?.url || "";
-    document.getElementById(prefix + "Params").value = data?.params ? JSON.stringify(data.params, null, 2) : "";
+    if (typeof data == "object") {
+      document.getElementById(prefix + "Api").value = data?.api || "";
+      document.getElementById(prefix + "Model").value = data?.model || "";
+      document.getElementById(prefix + "Url").value = data?.url || "";
+    } else {
+      document.getElementById(prefix + "Model").value = data || "";
+    }
   }
   if (profilePath) {
     title.textContent = "Edit Profile";
     window.electronAPI.getProfileContent(profilePath).then((profile) => {
+      const { name: name2, model, code_model, vision_model, embedding, speak_model, ...extras } = profile;
+      form.reset();
       document.getElementById("profileName").value = profile.name || "";
-      setModelSectionFields("profileModel", profile.model);
-      setModelSectionFields("profileCodeModel", profile.code_model);
-      setModelSectionFields("profileVisionModel", profile.vision_model);
-      setModelSectionFields("profileEmbedding", profile.embedding);
-      setModelSectionFields("profileSpeakModel", profile.speak_model);
+      setModelSectionFields("profileModel", model);
+      setModelSectionFields("profileCodeModel", code_model);
+      setModelSectionFields("profileVisionModel", vision_model);
+      setModelSectionFields("profileEmbedding", embedding);
+      setModelSectionFields("profileSpeakModel", speak_model);
+      console.log(extras);
+      editor = new EditorView({
+        doc: JSON.stringify(extras),
+        extensions: [
+          basicSetup,
+          json(),
+          jsonSchema(schema4),
+          //hideLineNumbers,
+          oneDark
+        ],
+        parent: document.getElementById("json-editor")
+      });
       form.dataset.path = profilePath;
     });
   } else {
@@ -74092,56 +74140,22 @@ function openProfileEditor(profilePath = null) {
       setModelSectionFields(prefix, {});
     });
     delete form.dataset.path;
+    editor = new EditorView({
+      doc: "{\n	\n}",
+      extensions: [
+        basicSetup,
+        json(),
+        jsonSchema(schema4),
+        //hideLineNumbers,
+        oneDark
+      ],
+      parent: document.getElementById("json-editor")
+    });
   }
   modal.style.display = "block";
 }
-var hideLineNumbers = EditorView.theme({
-  ".cm-gutters": {
-    display: "none"
-  }
-});
-var schema4 = {
-  type: "object",
-  properties: {
-    cooldown: { type: "number", title: "Cooldown (seconds)" },
-    conversing: { type: "string", title: "Conversing" },
-    coding: { type: "string", title: "Coding" },
-    saving_memory: { type: "string", title: "Saving Memory" },
-    bot_responder: { type: "string", title: "Bot Responder" },
-    image_analysis: { type: "string", title: "Image Analysis" },
-    speak_model: { type: "string", title: "Speak Model" },
-    modes: {
-      type: "object",
-      title: "Modes",
-      properties: {
-        self_preservation: { type: "boolean" },
-        unstuck: { type: "boolean" },
-        cowardice: { type: "boolean" },
-        self_defense: { type: "boolean" },
-        hunting: { type: "boolean" },
-        item_collecting: { type: "boolean" },
-        torch_placing: { type: "boolean" },
-        elbow_room: { type: "boolean" },
-        idle_staring: { type: "boolean" },
-        cheat: { type: "boolean" }
-      },
-      required: []
-    }
-  },
-  required: []
-};
-var editor = new EditorView({
-  doc: "{\n	\n}",
-  extensions: [
-    basicSetup,
-    json(),
-    jsonSchema(schema4),
-    //hideLineNumbers,
-    oneDark
-  ],
-  parent: document.getElementById("json-editor")
-});
 function saveProfile() {
+  editor.destroy();
   const form = document.getElementById("profileForm");
   function getModelSectionFields(prefix) {
     const model = document.getElementById(prefix + "Model").value.trim();
@@ -74343,6 +74357,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("saveProfile").addEventListener("click", saveProfile);
   document.getElementById("deleteProfile").addEventListener("click", deleteProfile);
   document.querySelector(".close").addEventListener("click", () => {
+    editor.destroy();
     document.getElementById("profileModal").style.display = "none";
   });
   const mdViewer = document.querySelector("zero-md");
