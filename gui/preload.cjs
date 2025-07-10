@@ -18,6 +18,22 @@ contextBridge.exposeInMainWorld('electronAPI', {
             });
     },
 
+    loadSettings: (data) => {
+        return ipcRenderer.invoke('load-settings', data)
+            .catch(error => {
+                console.error('Error loading settings:', error);
+                return {};
+            });
+    },
+
+    saveSettingsAs: (data) => {
+        return ipcRenderer.invoke('save-settings-as', data)
+            .catch(error => {
+                console.error('Error saving settings:', error);
+                return {};
+            });
+    },
+
     getSettingsJS: () => {
         return ipcRenderer.invoke('get-settings-js')
             .catch(error => {
@@ -31,6 +47,19 @@ contextBridge.exposeInMainWorld('electronAPI', {
             .catch(error => {
                 console.error('Error saving settings:', error);
                 throw error;
+            });
+    },
+
+    getAvailablePresets: () => {
+        console.log('Requesting presets...');
+        return ipcRenderer.invoke('get-available-presets')
+            .then(profiles => {
+                console.log('Received presets:', profiles);
+                return profiles;
+            })
+            .catch(error => {
+                console.error('Error getting presets:', error);
+                return [];
             });
     },
     
@@ -78,5 +107,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     }),
     onConsoleOutput: (callback) => ipcRenderer.on('console-output', (_, data) => callback(data)),
     onStats: (callback) => ipcRenderer.on('system-stats', (_, data) => callback(data)),
-    onStatus: (callback) => ipcRenderer.on('server-stats', (_, data) => callback(data))
+    onStatus: (callback) => ipcRenderer.on('server-stats', (_, data) => callback(data)),
+    onNewPort: (callback) => ipcRenderer.on('new-port-and-host', (_, data) => callback(data))
 });

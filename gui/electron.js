@@ -125,6 +125,88 @@ ipcMain.handle('get-settings', () => {
     }
 });
 
+ipcMain.handle('save-settings-as', (event, data) => {
+    const newPath = join(rootDir, 'gui', 'presets', data.name+'.json');
+    fs.copyFile(settingsPath, newPath, (err) => {
+    if (err) {
+        console.error('Error copying file:', err);
+    } else {
+        console.log('File copied and renamed successfully!', data);
+    }
+    });
+});
+
+ipcMain.handle('load-settings', (event, data) => {
+    const newPath = join(rootDir, data);
+    fs.copyFile(newPath, settingsPath, (err) => {
+    if (err) {
+        console.error('Error copying file:', err);
+    } else {
+        console.log('File copied and renamed successfully!', data);
+    }
+    });
+    if (existsSync(settingsPath)) {
+        try {
+            const rawSettings = readFileSync(settingsPath, 'utf8');
+            const userSettings = JSON.parse(rawSettings);
+            console.log('Loaded user settings:', userSettings);
+            settings = { ...defaultSettings, ...userSettings };
+            writeFileSync(settingsPath, JSON.stringify(settings, null, 2), 'utf8'); // Write merged settings
+        } catch (error) {
+            console.error('Error loading user settings, using defaults:', error);
+            settings = { ...defaultSettings };
+            writeFileSync(settingsPath, JSON.stringify(settings, null, 2), 'utf8');
+        }
+    } else {
+        settings = { ...defaultSettings };
+        writeFileSync(settingsPath, JSON.stringify(settings, null, 2), 'utf8');
+        console.log('Created new settings file with defaults');
+    }
+});
+
+ipcMain.handle('get-available-presets', () => {
+    try {
+        const presetsDir = join(rootDir, 'gui', 'presets');
+        console.log('Looking for presets in:', presetsDir);
+
+        let allPresets = [];
+        // Get profiles in profiles/ recursively
+        if (existsSync(presetsDir)) {
+            console.log("getting presets");
+            allPresets = getPresetsRecursively(presetsDir, rootDir);
+            console.log("got presets: ", allPresets);
+        } else {
+            console.error('Presets directory not found:', presetsDir);
+        }
+
+        // Merge and sort
+        return allPresets;
+    } catch (error) {
+        console.error('Error reading presets:', error);
+        return [];
+    }
+});
+
+function getPresetsRecursively(dir, baseDir) {
+    const presets = [];
+    const items = readdirSync(dir, { withFileTypes: true });
+
+    for (const item of items) {
+        const fullPath = join(dir, item.name);
+        const relativePath = './' + join(fullPath.replace(baseDir, '')).replace(/\\/g, '/');
+
+        if (
+            item.isFile() && 
+            item.name.endsWith('.json')
+        ) {
+            console.log('Added preset:', item.name);
+            presets.push({relativePath, name: item.name.replace(dir, '').replace('.json', '')});
+        }
+    }
+
+    return presets;
+}
+
 import settingsJS from '../settings.js';
 
 // IPC handlers for settings management
@@ -389,26 +471,55 @@ setInterval(async () => {
     });
   }, 1000);
 
-import mc from 'minecraftstatuspinger';
 
-async function checkServer(host = '127.0.0.1', port = 25565, botCount = 1) {
+  import mc from 'minecraftstatuspinger';
+
+function compareVersions(a, b) {
+  const pa = a.split('.').map(Number);
+  const pb = b.split('.').map(Number);
+  for (let i = 0; i < 3; i++) {
+    const da = pa[i] || 0;
+    const db = pb[i] || 0;
+    if (da > db) return 1;
+    if (da < db) return -1;
+  }
+  return 0;
+}
+
+function extractLatestVersion(versionString) {
+  const matches = versionString.match(/\d+\.\d+(\.\d+)*/g);
+  if (!matches || matches.length === 0) return versionString;
+  let latest = matches[0];
+  for (const v of matches) {
+    if (compareVersions(v, latest) > 0) {
+      latest = v;
+    }
+  }
+  return latest;
+}
+
+async function checkServer(host = '127.0.0.1', port = -1, botCount = 1) {
   try {
-    const res = await mc.lookup({
-      host,
-      port,
-      ping: false,       // Skip latency measurement for speed
-      timeout: 2000,     // Faster timeout
-      throwOnParseError: false,
-      SRVLookup: false,
-      JSONParse: true
-    });
+
+
+    const res = await (port !== ""
+      ? mc.lookup({ host, port, ping: false, throwOnParseError: false, SRVLookup: false, JSONParse: true })
+      : mc.lookup({ host, ping: false, throwOnParseError: false, SRVLookup: true, JSONParse: true })
+    );
 
     const online = res.status.players.online;
     const max = res.status.players.max;
-    const version = res.status.version.name;
+
+    let version = extractLatestVersion(res.status.version.name);
+
+    const MAX = '1.21.4';
+        if (compareVersions(version, MAX) > 0) {
+        version = MAX;
+    }
+
     const available = max - online;
     const mods = res.status.isModded;
-    const ChatReports = res.status.preventsChatReports;
+    const chatRestrict = res.status.preventsChatReports;
 
     return {
       version,
@@ -416,12 +527,12 @@ async function checkServer(host = '127.0.0.1', port = 25565, botCount = 1) {
       max,
       available,
       canFit: available >= botCount,
-      modsRequired: mods,
-      ChatReports,
+      modsRequired: !!mods,
+      ChatReports: !!chatRestrict,
       raw: res.status
     };
-  } catch (_err) {
-    return { canFit: false, error: 'Server unreachable or offline' };
+  } catch(err) {
+    return { canFit: false, error: 'Server unreachable or offline, '+err };
   }
 }
 

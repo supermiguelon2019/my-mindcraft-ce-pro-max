@@ -54,6 +54,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    window.electronAPI.getAvailablePresets().then(presets => {
+        const presetSelect = document.getElementById('presets');
+        presets.forEach(preset => {
+            const option = document.createElement('option');
+            option.value = preset.relativePath;
+            option.textContent = preset.name;
+            presetSelect.appendChild(option);
+        });
+    });
+
     // Load settings and populate form
     window.electronAPI.getSettings().then(settings => {
         console.log('Received settings:', settings);
@@ -178,18 +188,43 @@ document.getElementById('resetButton').addEventListener('click', () => {
         window.electronAPI.getSettingsJS()
             .then(settingsJS => {
                 Object.entries(settingsJS).forEach(([key, value]) => {
+                    if (key === 'auto_idle_trigger' && typeof value === 'object' && value !== null) {
+                        const enabled = document.getElementById('auto_idle_trigger_enabled');
+                        const timeout = document.getElementById('auto_idle_trigger_timeout_secs');
+                        const message = document.getElementById('auto_idle_trigger_message');
+                        if (enabled) enabled.checked = !!value.enabled;
+                        if (timeout) timeout.value = value.timeout_secs ?? '';
+                        if (message) message.value = value.message ?? '';
+                        return;
+                    }
                     const element = document.getElementById(key);
                     if (element) {
-                        if (element.type === 'checkbox') {
-                            element.checked = value;
-                        } else if (element.multiple) {
-                            Array.from(element.options).forEach(option => {
-                                option.selected = value.includes(option.value);
-                            });
-                        } else if (Array.isArray(value)) {
-                            element.value = value.join(', ');
-                        } else {
-                            element.value = value;
+                        try {
+                            if (element.type === 'checkbox') {
+                                element.checked = !!value;
+                            } else if (element.multiple) {
+                                // Handle multiple select
+                                const values = Array.isArray(value) ? value : [value];
+                                Array.from(element.options).forEach(option => {
+                                    option.selected = values.includes(option.value);
+                                });
+                            } else if (['blocked_actions', 'plugins', 'only_chat_with'].includes(element.id)) {
+                                // Handle array inputs
+                                element.value = Array.isArray(value) ? value.join(', ') : value;
+                            } else {
+                                element.value = value;
+                            }
+                        } catch (error) {
+                            console.error(`Error setting value for ${key}:`, error);
+                        }
+                    }
+                    // Also set home_ fields if they exist for this key
+                    const homeElement = document.getElementById('home_' + key);
+                    if (homeElement) {
+                        try {
+                            homeElement.value = value;
+                        } catch (error) {
+                            console.error(`Error setting value for home_${key}:`, error);
                         }
                     }
                 });
@@ -197,7 +232,102 @@ document.getElementById('resetButton').addEventListener('click', () => {
             })
             .catch(error => showStatus('Error resetting settings: ' + error.message, 'error'));
     }
-});    // Start server
+});
+
+document.getElementById('saveButton').addEventListener('click', () => {
+    document.getElementById('promptContainer').style.display = 'block';
+});
+
+
+
+document.getElementById('confirmPrompt').addEventListener('click', () => {
+    const name = document.getElementById('presetName').value;
+    document.getElementById('promptContainer').style.display = 'none';
+    
+    console.log("User entered preset name:", name);
+    window.electronAPI.saveSettingsAs({name}).then(() => {
+        window.electronAPI.getAvailablePresets().then(presets => {
+        const presetSelect = document.getElementById('presets');
+        presets.forEach(preset => {
+            const option = document.createElement('option');
+            option.value = preset.relativePath;
+            option.textContent = preset.name;
+            presetSelect.appendChild(option);
+        });
+    });
+    });
+});
+
+document.getElementById('cancelPrompt').addEventListener('click', () => {
+    document.getElementById('promptContainer').style.display = 'none';
+});
+
+
+document.getElementById('loadButton').addEventListener('click', () => {
+    document.getElementById('presetPromptContainer').style.display = 'block';
+});
+
+document.getElementById('loadConfirmPrompt').addEventListener('click', () => {
+    document.getElementById('presetPromptContainer').style.display = 'none';
+    
+
+    window.electronAPI.loadSettings(document.getElementById("presets").value).then(()=>{
+        window.electronAPI.getSettings().then(settings => {
+            console.log('Received settings:', settings);
+            Object.entries(settings).forEach(([key, value]) => {
+                // Handle auto_idle_trigger as a nested object
+                if (key === 'auto_idle_trigger' && typeof value === 'object' && value !== null) {
+                    const enabled = document.getElementById('auto_idle_trigger_enabled');
+                    const timeout = document.getElementById('auto_idle_trigger_timeout_secs');
+                    const message = document.getElementById('auto_idle_trigger_message');
+                    if (enabled) enabled.checked = !!value.enabled;
+                    if (timeout) timeout.value = value.timeout_secs ?? '';
+                    if (message) message.value = value.message ?? '';
+                    return;
+                }
+                const element = document.getElementById(key);
+                if (element) {
+                    try {
+                        if (element.type === 'checkbox') {
+                            element.checked = !!value;
+                        } else if (element.multiple) {
+                            // Handle multiple select
+                            const values = Array.isArray(value) ? value : [value];
+                            Array.from(element.options).forEach(option => {
+                                option.selected = values.includes(option.value);
+                            });
+                        } else if (['blocked_actions', 'plugins', 'only_chat_with'].includes(element.id)) {
+                            // Handle array inputs
+                            element.value = Array.isArray(value) ? value.join(', ') : value;
+                        } else {
+                            element.value = value;
+                        }
+                    } catch (error) {
+                        console.error(`Error setting value for ${key}:`, error);
+                    }
+                }
+                // Also set home_ fields if they exist for this key
+                const homeElement = document.getElementById('home_' + key);
+                if (homeElement) {
+                    try {
+                        homeElement.value = value;
+                    } catch (error) {
+                        console.error(`Error setting value for home_${key}:`, error);
+                    }
+                }
+            });
+        }).catch(error => {
+            console.error('Error loading settings:', error);
+        });
+    });
+});
+
+document.getElementById('loadCancelPrompt').addEventListener('click', () => {
+    document.getElementById('presetPromptContainer').style.display = 'none';
+});
+
+
+// Start server
 document.getElementById('startButton').addEventListener('click', async () => {
     const startButton = document.getElementById('startButton');
     startButton.disabled = true;
@@ -709,4 +839,12 @@ window.electronAPI.onStatus((data) => {
     document.documentElement.style.setProperty('--circle-color', 'green');
     text_display.textContent = "the bot ready!";
     text_tip.textContent = "";
+});
+
+window.electronAPI.onNewPort((data) => {
+    const port = document.getElementById("port");
+    const home_port = document.getElementById("home_port");
+    port.value = data.port;
+    home_port.value = data.port;
+    console.log(data);
 });

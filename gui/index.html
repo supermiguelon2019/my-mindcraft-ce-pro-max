@@ -116,20 +116,21 @@
             box-shadow: 0 1px 4px rgba(0,0,0,0.10);
             overflow: hidden;
             transition: box-shadow 0.2s;
+            padding: 4px
         }
         /* Unique, meaningful gradients for each settings group */
-        .setting-group:nth-child(1)  { background: linear-gradient(120deg, #000000 0%, #009dbd 100%); } 
-        .setting-group:nth-child(2)  { background: linear-gradient(120deg, #000000 0%, #7f43ce 100%); } 
-        .setting-group:nth-child(3)  { background: linear-gradient(120deg, #000000 0%, #d67b3e 100%); } 
-        .setting-group:nth-child(4)  { background: linear-gradient(120deg, #000000 0%, #c5d116 100%); } 
-        .setting-group:nth-child(5)  { background: linear-gradient(120deg, #000000 0%, #881c1c 100%); } 
-        .setting-group:nth-child(6)  { background: linear-gradient(120deg, #000000 0%, #1e851b 100%); }
-        .setting-group:nth-child(7)  { background: linear-gradient(120deg, #000000 20%,#43cea2 100%); } 
-        .setting-group:nth-child(8)  { background: linear-gradient(120deg, #000000 0%, #727272 100%); }
-        .setting-group:nth-child(9)  { background: linear-gradient(120deg, #000000 0%, #a63785 100%); }
-        .setting-group:nth-child(10) { background: linear-gradient(120deg, #000000 0%, #bd1842 100%); }
-        .setting-group:nth-child(11) { background: linear-gradient(120deg, #000000 0%, #846afb 100%); }
-        .setting-group:nth-child(12) { background: linear-gradient(120deg, #000000 0%, #11998e 100%); }
+        .setting-group:nth-child(1)  { background: linear-gradient(120deg, #18e6e6 0%, #009dbd 100%); } 
+        .setting-group:nth-child(2)  { background: linear-gradient(120deg, #b743ce 0%, #7f43ce 100%); } 
+        .setting-group:nth-child(3)  { background: linear-gradient(120deg, #d6ba3e 0%, #d67b3e 100%); } 
+        .setting-group:nth-child(4)  { background: linear-gradient(120deg, #99d116 0%, #c5d116 100%); } 
+        .setting-group:nth-child(5)  { background: linear-gradient(120deg, #881c45 0%, #881c1c 100%); } 
+        .setting-group:nth-child(6)  { background: linear-gradient(120deg, #1b8544 0%, #1e851b 100%); }
+        .setting-group:nth-child(7)  { background: linear-gradient(120deg, #43c9ce 0%,#43cea2 100%); } 
+        .setting-group:nth-child(8)  { background: linear-gradient(120deg, #4b4b4b 0%, #727272 100%); }
+        .setting-group:nth-child(9)  { background: linear-gradient(120deg, #a637a0 0%, #a63785 100%); }
+        .setting-group:nth-child(10) { background: linear-gradient(120deg, #bd1818 0%, #bd1842 100%); }
+        .setting-group:nth-child(11) { background: linear-gradient(120deg, #6a84fb 0%, #846afb 100%); }
+        .setting-group:nth-child(12) { background: linear-gradient(120deg, #119960 0%, #11998e 100%); }
         .setting-group summary {
             padding: 13px 18px;
             background: rgba(0,0,0,0.18);
@@ -139,6 +140,7 @@
             cursor: pointer;
             user-select: none;
             transition: background 0.2s;
+            border-radius: 12px;
             border-bottom: 1px solid rgba(255,255,255,0.07);
         }
         .setting-group summary:hover {
@@ -217,14 +219,21 @@
         #stopButton:hover {
             background: #b63628;
         }
-        #resetButton {
-            background-color:#555555;
-            color:white;
+        #buttonHub {
             margin-bottom:30px;
-            display:block;
+            display:flex;
             margin-top: 30px;
             margin-left:auto;
             margin-right:auto;
+            align-content: center;
+            justify-content: center;
+        }
+        .buttonHubButton {
+            margin: 0 6px 0 6px;
+        }
+        #resetButton {
+            background-color:#555555;
+            color:white;
         }
         #resetButton:hover {
             background: #424242;
@@ -498,6 +507,139 @@
         svg circle {
             fill: var(--circle-color);
         }
+        .setting-group-inside {
+            border-radius: 12px;
+            background: black;
+        }
+        #promptContainer {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #121212; /* Dark background */
+        padding: 24px 32px;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        width: 320px;
+        font-family: sans-serif;
+        color: #e0e0e0;
+        border: 1px solid #1e88e5;
+        }
+
+        #promptContainer label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #90caf9; /* Light blue label */
+        }
+
+        #promptContainer input {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #1e88e5;
+        border-radius: 6px;
+        background-color: #1e1e1e;
+        color: #ffffff;
+        margin-bottom: 16px;
+        box-sizing: border-box;
+        }
+
+        #promptContainer button {
+        padding: 8px 16px;
+        font-size: 14px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-right: 8px;
+        transition: background 0.2s ease;
+        }
+
+        #confirmPrompt {
+        background-color: #1e88e5;
+        color: #ffffff;
+        }
+
+        #confirmPrompt:hover {
+        background-color: #1565c0;
+        }
+
+        #cancelPrompt {
+        background-color: #333;
+        color: #ccc;
+        }
+
+        #cancelPrompt:hover {
+        background-color: #444;
+        }
+        #presetPromptContainer {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #121212; /* Dark background */
+        padding: 24px 32px;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        width: 320px;
+        font-family: sans-serif;
+        color: #e0e0e0;
+        border: 1px solid #1e88e5;
+        }
+
+        #presetPromptContainer label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #90caf9; /* Light blue label */
+        }
+
+        #presetPromptContainer input {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #1e88e5;
+        border-radius: 6px;
+        background-color: #1e1e1e;
+        color: #ffffff;
+        margin-bottom: 16px;
+        box-sizing: border-box;
+        }
+
+        #presetPromptContainer button {
+        padding: 8px 16px;
+        font-size: 14px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-right: 8px;
+        transition: background 0.2s ease;
+        }
+
+        #loadConfirmPrompt {
+        background-color: #1e88e5;
+        color: #ffffff;
+        }
+
+        #loadConfirmPrompt:hover {
+        background-color: #1565c0;
+        }
+
+        #loadCancelPrompt {
+        background-color: #333;
+        color: #ccc;
+        }
+
+        #loadCancelPrompt:hover {
+        background-color: #444;
+        }
+
     </style>
 </head>
 <body>
@@ -549,6 +691,19 @@
     </div>
     <canvas id="stolen-smoke-canvas"></canvas>
     <div id="content-area">
+        <div id="promptContainer">
+            <label for="presetName">Preset name:</label>
+            <input type="text" id="presetName" />
+            <button id="confirmPrompt">OK</button>
+            <button id="cancelPrompt">Cancel</button>
+        </div>
+        <div id="presetPromptContainer">
+            <label for="presetName">Preset name:</label>
+            <select id="presets"></select>
+            <button id="loadConfirmPrompt">OK</button>
+            <button id="loadCancelPrompt">Cancel</button>
+        </div>
+
         <div id="home" class="tabcontent">
             <div style="text-align: center;">
                 <h1>Welcome to mindcraft-ce</h1>
@@ -593,7 +748,9 @@
         <div id="settings" class="tabcontent">
             <div class="container" >
                 <div class="settings-grid">
-                <details class="setting-group" open>
+                
+                <div class="setting-group" >
+                    <details class="setting-group-inside">
                     <summary>Connection Settings</summary>
                     <div class="settings-content">
                     <div class="setting-item">
@@ -612,8 +769,10 @@
                         </select>
                     </div>            </div>
                 </details>
+            </div>
 
-                <details class="setting-group">
+                <div class="setting-group">
+                    <details class="setting-group-inside">
                     <summary>Mind Server Settings</summary>
                     <div class="settings-content">
                         <div class="setting-item">
@@ -630,8 +789,10 @@
                     </div>
                 </div>
                 </details>
+                </div>
 
-                <details class="setting-group">
+                <div class="setting-group">
+                    <details class="setting-group-inside">
                     <summary>Profile Settings</summary>
                     <div class="settings-content">
                         <div class="setting-item">
@@ -747,8 +908,10 @@
 
                     </div>
                 </details>
+                </div>
 
-                <details class="setting-group">
+                <div class="setting-group">
+                    <details class="setting-group-inside">
                     <summary>General Settings</summary>
                     <div class="settings-content">
                         <div class="setting-item">
@@ -769,8 +932,10 @@
                         </div>
                     </div>
                 </details>
+                </div>
 
-                <details class="setting-group">
+                <div class="setting-group">
+                    <details class="setting-group-inside">
                     <summary>Language & Display</summary>
                     <div class="settings-content">
                         <div class="setting-item">
@@ -783,8 +948,10 @@
                         </div>
                     </div>
                 </details>
+                </div>
 
-                <details class="setting-group">
+                <div class="setting-group">
+                    <details class="setting-group-inside">
                     <summary>Security Settings</summary>
                     <div class="settings-content">
                         <div class="setting-item">
@@ -809,8 +976,10 @@
                         </div>
                     </div>
                 </details>
+                </div>
 
-                <details class="setting-group">
+                <div class="setting-group">
+                    <details class="setting-group-inside">
                     <summary>Performance Settings</summary>
                     <div class="settings-content">
                         <div class="setting-item">
@@ -823,8 +992,10 @@
                         </div>
                     </div>
                 </details>
+                </div>
 
-                <details class="setting-group">
+               <div class="setting-group">
+                    <details class="setting-group-inside">
                     <summary>Chat Settings</summary>
                     <div class="settings-content">
                         <div class="setting-item">
@@ -853,8 +1024,10 @@
                         </div>
                     </div>
                 </details>
+                </div>
 
-                <details class="setting-group">
+                <div class="setting-group">
+                    <details class="setting-group-inside">
                     <summary>Speech Settings</summary>
                     <div class="settings-content">
                         <div class="setting-item">
@@ -882,8 +1055,10 @@
                         </div>
                     </div>
                 </details>
+                </div>
 
-                <details class="setting-group">
+                <div class="setting-group">
+                    <details class="setting-group-inside">
                     <summary>STT Audio Settings</summary>
                     <div class="settings-content">
                         <div class="setting-item">
@@ -920,8 +1095,10 @@
                         </div>
                     </div>
                 </details>
+                </div>
 
-                <details class="setting-group">
+                <div class="setting-group">
+                    <details class="setting-group-inside">
                     <summary>Logging Settings</summary>
                     <div class="settings-content">
                         <div class="setting-item">
@@ -942,8 +1119,10 @@
                         </div>
                     </div>
                 </details>
+                </div>
 
-                <details class="setting-group">
+                <div class="setting-group">
+                    <details class="setting-group-inside">
                     <summary>Autonomous/Idle Settings</summary>
                     <div class="settings-content">
                         <div class="setting-item">
@@ -960,9 +1139,14 @@
                         </div>
                     </div>
                 </details>
+                </div>
                 <div id="status" class="status" style="display: none;"></div>
             </div>
-            <button id="resetButton">Reset</button>
+            <div id="buttonHub">
+                <button id="saveButton" class="buttonHubButton">Save as</button>
+                <button id="resetButton" class="buttonHubButton">Reset</button>
+                <button id="loadButton" class="buttonHubButton">Load</button>
+            </div>
         </div>
     </div>
 

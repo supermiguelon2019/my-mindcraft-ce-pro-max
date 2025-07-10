@@ -73786,6 +73786,15 @@ document.addEventListener("DOMContentLoaded", () => {
       profileSelect.appendChild(option2);
     });
   });
+  window.electronAPI.getAvailablePresets().then((presets) => {
+    const presetSelect = document.getElementById("presets");
+    presets.forEach((preset) => {
+      const option2 = document.createElement("option");
+      option2.value = preset.relativePath;
+      option2.textContent = preset.name;
+      presetSelect.appendChild(option2);
+    });
+  });
   window.electronAPI.getSettings().then((settings) => {
     console.log("Received settings:", settings);
     Object.entries(settings).forEach(([key2, value]) => {
@@ -73896,24 +73905,122 @@ document.getElementById("resetButton").addEventListener("click", () => {
   if (confirm("Are you sure you want to reset all settings to their default values?")) {
     window.electronAPI.getSettingsJS().then((settingsJS) => {
       Object.entries(settingsJS).forEach(([key2, value]) => {
+        if (key2 === "auto_idle_trigger" && typeof value === "object" && value !== null) {
+          const enabled = document.getElementById("auto_idle_trigger_enabled");
+          const timeout = document.getElementById("auto_idle_trigger_timeout_secs");
+          const message = document.getElementById("auto_idle_trigger_message");
+          if (enabled) enabled.checked = !!value.enabled;
+          if (timeout) timeout.value = value.timeout_secs ?? "";
+          if (message) message.value = value.message ?? "";
+          return;
+        }
         const element2 = document.getElementById(key2);
         if (element2) {
-          if (element2.type === "checkbox") {
-            element2.checked = value;
-          } else if (element2.multiple) {
-            Array.from(element2.options).forEach((option2) => {
-              option2.selected = value.includes(option2.value);
-            });
-          } else if (Array.isArray(value)) {
-            element2.value = value.join(", ");
-          } else {
-            element2.value = value;
+          try {
+            if (element2.type === "checkbox") {
+              element2.checked = !!value;
+            } else if (element2.multiple) {
+              const values = Array.isArray(value) ? value : [value];
+              Array.from(element2.options).forEach((option2) => {
+                option2.selected = values.includes(option2.value);
+              });
+            } else if (["blocked_actions", "plugins", "only_chat_with"].includes(element2.id)) {
+              element2.value = Array.isArray(value) ? value.join(", ") : value;
+            } else {
+              element2.value = value;
+            }
+          } catch (error2) {
+            console.error(`Error setting value for ${key2}:`, error2);
+          }
+        }
+        const homeElement = document.getElementById("home_" + key2);
+        if (homeElement) {
+          try {
+            homeElement.value = value;
+          } catch (error2) {
+            console.error(`Error setting value for home_${key2}:`, error2);
           }
         }
       });
       showStatus("Settings reset to defaults", "success");
     }).catch((error2) => showStatus("Error resetting settings: " + error2.message, "error"));
   }
+});
+document.getElementById("saveButton").addEventListener("click", () => {
+  document.getElementById("promptContainer").style.display = "block";
+});
+document.getElementById("confirmPrompt").addEventListener("click", () => {
+  const name2 = document.getElementById("presetName").value;
+  document.getElementById("promptContainer").style.display = "none";
+  console.log("User entered preset name:", name2);
+  window.electronAPI.saveSettingsAs({ name: name2 }).then(() => {
+    window.electronAPI.getAvailablePresets().then((presets) => {
+      const presetSelect = document.getElementById("presets");
+      presets.forEach((preset) => {
+        const option2 = document.createElement("option");
+        option2.value = preset.relativePath;
+        option2.textContent = preset.name;
+        presetSelect.appendChild(option2);
+      });
+    });
+  });
+});
+document.getElementById("cancelPrompt").addEventListener("click", () => {
+  document.getElementById("promptContainer").style.display = "none";
+});
+document.getElementById("loadButton").addEventListener("click", () => {
+  document.getElementById("presetPromptContainer").style.display = "block";
+});
+document.getElementById("loadConfirmPrompt").addEventListener("click", () => {
+  document.getElementById("presetPromptContainer").style.display = "none";
+  window.electronAPI.loadSettings(document.getElementById("presets").value).then(() => {
+    window.electronAPI.getSettings().then((settings) => {
+      console.log("Received settings:", settings);
+      Object.entries(settings).forEach(([key2, value]) => {
+        if (key2 === "auto_idle_trigger" && typeof value === "object" && value !== null) {
+          const enabled = document.getElementById("auto_idle_trigger_enabled");
+          const timeout = document.getElementById("auto_idle_trigger_timeout_secs");
+          const message = document.getElementById("auto_idle_trigger_message");
+          if (enabled) enabled.checked = !!value.enabled;
+          if (timeout) timeout.value = value.timeout_secs ?? "";
+          if (message) message.value = value.message ?? "";
+          return;
+        }
+        const element2 = document.getElementById(key2);
+        if (element2) {
+          try {
+            if (element2.type === "checkbox") {
+              element2.checked = !!value;
+            } else if (element2.multiple) {
+              const values = Array.isArray(value) ? value : [value];
+              Array.from(element2.options).forEach((option2) => {
+                option2.selected = values.includes(option2.value);
+              });
+            } else if (["blocked_actions", "plugins", "only_chat_with"].includes(element2.id)) {
+              element2.value = Array.isArray(value) ? value.join(", ") : value;
+            } else {
+              element2.value = value;
+            }
+          } catch (error2) {
+            console.error(`Error setting value for ${key2}:`, error2);
+          }
+        }
+        const homeElement = document.getElementById("home_" + key2);
+        if (homeElement) {
+          try {
+            homeElement.value = value;
+          } catch (error2) {
+            console.error(`Error setting value for home_${key2}:`, error2);
+          }
+        }
+      });
+    }).catch((error2) => {
+      console.error("Error loading settings:", error2);
+    });
+  });
+});
+document.getElementById("loadCancelPrompt").addEventListener("click", () => {
+  document.getElementById("presetPromptContainer").style.display = "none";
 });
 document.getElementById("startButton").addEventListener("click", async () => {
   const startButton = document.getElementById("startButton");
@@ -74355,6 +74462,13 @@ window.electronAPI.onStatus((data) => {
   document.documentElement.style.setProperty("--circle-color", "green");
   text_display.textContent = "the bot ready!";
   text_tip.textContent = "";
+});
+window.electronAPI.onNewPort((data) => {
+  const port = document.getElementById("port");
+  const home_port = document.getElementById("home_port");
+  port.value = data.port;
+  home_port.value = data.port;
+  console.log(data);
 });
 /*! Bundled license information:
 
