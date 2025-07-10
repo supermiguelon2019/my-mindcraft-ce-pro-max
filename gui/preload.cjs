@@ -17,6 +17,15 @@ contextBridge.exposeInMainWorld('electronAPI', {
                 return {};
             });
     },
+
+    getSettingsJS: () => {
+        return ipcRenderer.invoke('get-settings-js')
+            .catch(error => {
+                console.error('Error getting settings:', error);
+                return {};
+            });
+    },
+
     saveSettings: (settings) => {
         return ipcRenderer.invoke('save-settings', settings)
             .catch(error => {

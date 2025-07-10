@@ -73894,8 +73894,8 @@ async function checkServerAndLoad() {
 }
 document.getElementById("resetButton").addEventListener("click", () => {
   if (confirm("Are you sure you want to reset all settings to their default values?")) {
-    window.electronAPI.getSettings().then((settings) => {
-      Object.entries(settings).forEach(([key2, value]) => {
+    window.electronAPI.getSettingsJS().then((settingsJS) => {
+      Object.entries(settingsJS).forEach(([key2, value]) => {
         const element2 = document.getElementById(key2);
         if (element2) {
           if (element2.type === "checkbox") {
@@ -74327,28 +74327,34 @@ window.electronAPI.onConsoleOutput((data) => {
 });
 window.electronAPI.onStatus((data) => {
   const text_display = document.getElementById("status-text");
+  const text_tip = document.getElementById("status-tip");
   if (data.error) {
     document.documentElement.style.setProperty("--circle-color", "red");
     text_display.textContent = "no server detected";
+    text_tip.textContent = "make sure the port and ip are correct";
     return;
   }
   if (data.modsRequired) {
     document.documentElement.style.setProperty("--circle-color", "red");
     text_display.textContent = "the server is modded";
+    text_tip.textContent = "the bot cant join to modded servers";
     return;
   }
   if (!data.canFit) {
     document.documentElement.style.setProperty("--circle-color", "orange");
     text_display.textContent = "the server is full";
+    text_tip.textContent = "the bot cant join";
     return;
   }
   if (data.ChatReports) {
     document.documentElement.style.setProperty("--circle-color", "yellow");
     text_display.textContent = "No chat reports is installed";
+    text_tip.textContent = "the bot cant see messages";
     return;
   }
   document.documentElement.style.setProperty("--circle-color", "green");
   text_display.textContent = "the bot ready!";
+  text_tip.textContent = "";
 });
 /*! Bundled license information:
 

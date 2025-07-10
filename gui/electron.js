@@ -125,6 +125,14 @@ ipcMain.handle('get-settings', () => {
     }
 });
 
+import settingsJS from '../settings.js';
+
+// IPC handlers for settings management
+ipcMain.handle('get-settings-js', () => {
+    console.log(settingsJS);
+    return settingsJS;
+});
+
 // Get available profiles
 ipcMain.handle('get-available-profiles', () => {
     try {
