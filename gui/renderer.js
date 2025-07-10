@@ -152,7 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveSettings = () => {
         const settings = collectSettings();
         return window.electronAPI.saveSettings(settings)
-            .then(() => showStatus('Settings saved successfully!', 'success'))
             .catch(error => showStatus('Error saving settings: ' + error.message, 'error'));
     };
 
@@ -331,13 +330,10 @@ document.getElementById('loadCancelPrompt').addEventListener('click', () => {
 document.getElementById('startButton').addEventListener('click', async () => {
     const startButton = document.getElementById('startButton');
     startButton.disabled = true;
-    showStatus('Starting server...', 'info');
     
     window.electronAPI.startMain()
         .then(success => {
-            if (success) {
-                showStatus('Server started successfully!', 'success');
-            } else {
+            if (!success) {
                 showStatus('Failed to start server', 'error');
                 startButton.disabled = false;
             }
@@ -354,12 +350,10 @@ document.getElementById('startButton').addEventListener('click', async () => {
 document.getElementById('stopButton').addEventListener('click', () => {
     const stopButton = document.getElementById('stopButton');
     stopButton.disabled = true;
-    showStatus('Stopping server...', 'info');
     
     window.electronAPI.stopMain()
         .then(success => {
             if (success) {
-                showStatus('Server stopped successfully!', 'success');
                 document.getElementById('startButton').disabled = false;
             } else {
                 showStatus('Failed to stop server', 'error');
