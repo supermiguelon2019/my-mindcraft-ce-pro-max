@@ -74121,7 +74121,7 @@ function openProfileEditor(profilePath = null) {
       setModelSectionFields("profileSpeakModel", speak_model);
       console.log(extras);
       editor = new EditorView({
-        doc: JSON.stringify(extras),
+        doc: JSON.stringify(extras, false, "	"),
         extensions: [
           basicSetup,
           json(),
