@@ -365,7 +365,9 @@ document.getElementById('loadCancelPrompt').addEventListener('click', () => {
 // Start server
 document.getElementById('startButton').addEventListener('click', async () => {
     const startButton = document.getElementById('startButton');
+    const stopButton = document.getElementById('stopButton');
     startButton.disabled = true;
+    stopButton.disabled = false;
     
     window.electronAPI.startMain()
         .then(success => {
@@ -389,17 +391,12 @@ document.getElementById('stopButton').addEventListener('click', () => {
     
     window.electronAPI.stopMain()
         .then(success => {
-            if (success) {
-                document.getElementById('startButton').disabled = false;
-            } else {
-                showStatus('Failed to stop server', 'error');
-            }
-            stopButton.disabled = false;
+            stopButton.disabled = true;
         })
         .catch(error => {
             console.error('Stop error:', error);
             showStatus('Error stopping server: ' + error.message, 'error');
-            stopButton.disabled = false;
+            stopButton.disabled = true;
         });
     
         document.getElementById("View").style.display = "none";
@@ -819,33 +816,39 @@ window.electronAPI.onConsoleOutput((data) => {
 window.electronAPI.onStatus((data) => {
     const text_display = document.getElementById('status-text');
     const text_tip = document.getElementById('status-tip');
+    const start_button = document.getElementById('startButton');
     if (data.error) {
         document.documentElement.style.setProperty('--circle-color', 'red');
         text_display.textContent = "no server detected";
         text_tip.textContent = "make sure the port and ip are correct";
+        start_button.disabled = true;
         return;
     }
     if (data.modsRequired) {
         document.documentElement.style.setProperty('--circle-color', 'red');
         text_display.textContent = "the server is modded";
         text_tip.textContent = "the bot cant join to modded servers";
+        start_button.disabled = true;
         return;
     }
     if (!data.canFit) {
         document.documentElement.style.setProperty('--circle-color', 'orange');
         text_display.textContent = "the server is full";
         text_tip.textContent = "the bot cant join";
+        start_button.disabled = true;
         return;
     }
     if (data.ChatReports) {
         document.documentElement.style.setProperty('--circle-color', 'yellow');
         text_display.textContent = "No chat reports is installed";
         text_tip.textContent = "the bot cant see messages";
+        start_button.disabled = false;
         return;
     }
     document.documentElement.style.setProperty('--circle-color', 'green');
     text_display.textContent = "the bot ready!";
     text_tip.textContent = "";
+        start_button.disabled = false;
 });
 
 window.electronAPI.onNewPort((data) => {

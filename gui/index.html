@@ -213,11 +213,19 @@
         #startButton:hover {
             background: #129248;
         }
+        #startButton:disabled {
+            background: #1c2b22;
+            cursor: default;
+        }
         #stopButton {
             background: #e74c3c;
         }
         #stopButton:hover {
             background: #b63628;
+        }
+        #stopButton:disabled {
+            background: #2c1a18;
+            cursor: default;
         }
         #buttonHub {
             margin-bottom:30px;
@@ -720,8 +728,8 @@
                         <input type="text" id="home_port" />
                     </div>
                     <div class="button-container" id="home-button-container">
-                        <button id="stopButton">Stop</button>
-                        <button id="startButton">Start</button>
+                        <button id="stopButton" disabled>Stop</button>
+                        <button id="startButton" disabled>Start</button>
                     </div>
                 </div>
                 <div class="grid-item" id="chartContainer">
