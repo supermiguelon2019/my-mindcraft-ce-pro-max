@@ -39,8 +39,6 @@ twitch-integration.js
 test-mindserver-connection.js
 setup-twitch-integration.js
 
-MindCraftLauncher/obj/
-MindCraftLauncher/bin/
 
 # (to @Sweaterdog) DO NOT ignore `settings.js` as it is a required file for the repo to function.
 # If `settings.js` is put in the `.gitignore` file, changes made to do things like add new features - e.g. adding a new key to the file
